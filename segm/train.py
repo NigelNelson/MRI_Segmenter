@@ -1,5 +1,15 @@
 import sys
+
+import sys
+import os
 from pathlib import Path
+sys.path.append(str(Path.cwd().parent) + '/mri_histology_toolkit')
+sys.path.append(str(Path.cwd().parent) + '/homologous_point_prediction')
+
+# from homologous_point_prediction.evaluate import evaluate, evaluate_rotation
+
+from homologous_point_prediction.data_processing.seg_data_loader import SegDataLoader
+
 import yaml
 import json
 import numpy as np
@@ -163,13 +173,20 @@ def main(
     # dataset
     dataset_kwargs = variant["dataset_kwargs"]
 
-    train_loader = create_dataset(dataset_kwargs)
+    training_data_config = '/home/nelsonni/laviolette/homologous_point_prediction/homologous_point_prediction/data_processing/metadata/seg_train_config.json'
+    validation_data_config = '/home/nelsonni/laviolette/homologous_point_prediction/homologous_point_prediction/data_processing/metadata/seg_validation_config.json'
+
+    train_loader = SegDataLoader(training_data_config, batch_size=batch_size)
+    val_loader = SegDataLoader(validation_data_config, batch_size=1)
+
+    #train_loader = create_dataset(dataset_kwargs)
     val_kwargs = dataset_kwargs.copy()
     val_kwargs["split"] = "val"
     val_kwargs["batch_size"] = 1
     val_kwargs["crop"] = False
-    val_loader = create_dataset(val_kwargs)
-    n_cls = train_loader.unwrapped.n_cls
+    #val_loader = create_dataset(val_kwargs)
+    # n_cls = train_loader.unwrapped.n_cls
+    n_cls = 15 #TODO fix sloppy code
 
     # model
     net_kwargs = variant["net_kwargs"]
@@ -228,10 +245,14 @@ def main(
     if hasattr(model, "module"):
         model_without_ddp = model.module
 
-    val_seg_gt = val_loader.dataset.get_gt_seg_maps()
+    #val_seg_gt = val_loader.dataset.get_gt_seg_maps()
 
-    print(f"Train dataset length: {len(train_loader.dataset)}")
-    print(f"Val dataset length: {len(val_loader.dataset)}")
+    val_seg_gt = {}
+    for batch in val_loader:
+        val_seg_gt[batch[2][0]] = batch[1][0]
+
+    print(f"Train dataset length: {len(train_loader) * batch_size}")
+    print(f"Val dataset length: {len(val_loader)}")
     print(f"Encoder parameters: {num_params(model_without_ddp.encoder)}")
     print(f"Decoder parameters: {num_params(model_without_ddp.decoder)}")
 

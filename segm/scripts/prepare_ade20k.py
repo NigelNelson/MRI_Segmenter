@@ -12,10 +12,10 @@ def download_ade(path, overwrite=False):
             "http://data.csail.mit.edu/places/ADEchallenge/ADEChallengeData2016.zip",
             "219e1696abb36c8ba3a3afe7fb2f4b4606a897c7",
         ),
-        (
-            "http://data.csail.mit.edu/places/ADEchallenge/release_test.zip",
-            "e05747892219d10e9243933371a497e905a4860c",
-        ),
+        # (
+        #     "http://data.csail.mit.edu/places/ADEchallenge/release_test.zip",
+        #     "e05747892219d10e9243933371a497e905a4860c",
+        # ),
     ]
     download_dir = path / "downloads"
     download_dir.mkdir(parents=True, exist_ok=True)

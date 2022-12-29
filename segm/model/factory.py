@@ -122,4 +122,6 @@ def load_model(model_path):
 
     model.load_state_dict(checkpoint, strict=True)
 
+    print('got to 2')
+
     return model, variant

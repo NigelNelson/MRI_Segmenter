@@ -14,7 +14,7 @@ def init_process(backend="nccl"):
         gpu_ids = os.environ["SLURM_STEP_GPUS"].split(",")
         os.environ["MASTER_PORT"] = str(12345 + int(min(gpu_ids)))
     else:
-        os.environ["MASTER_PORT"] = str(12345)
+        os.environ["MASTER_PORT"] = str(1234)
 
     if "SLURM_JOB_NODELIST" in os.environ:
         hostnames = hostlist.expand_hostlist(os.environ["SLURM_JOB_NODELIST"])

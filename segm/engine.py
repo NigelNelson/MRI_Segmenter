@@ -17,17 +17,18 @@ def train_one_epoch(
     amp_autocast,
     loss_scaler,
 ):
-    criterion = torch.nn.CrossEntropyLoss(ignore_index=IGNORE_LABEL)
+    #criterion = torch.nn.CrossEntropyLoss(ignore_index=IGNORE_LABEL)
+    criterion = torch.nn.CrossEntropyLoss()
     logger = MetricLogger(delimiter="  ")
     header = f"Epoch: [{epoch}]"
     print_freq = 100
 
     model.train()
-    data_loader.set_epoch(epoch)
+    #data_loader.set_epoch(epoch)
     num_updates = epoch * len(data_loader)
     for batch in logger.log_every(data_loader, print_freq, header):
-        im = batch["im"].to(ptu.device)
-        seg_gt = batch["segmentation"].long().to(ptu.device)
+        im = batch[0].to(ptu.device) # Get MRI
+        seg_gt = batch[1].long().to(ptu.device) # Get Seg
 
         with amp_autocast():
             seg_pred = model.forward(im)
@@ -80,11 +81,11 @@ def evaluate(
     val_seg_pred = {}
     model.eval()
     for batch in logger.log_every(data_loader, print_freq, header):
-        ims = [im.to(ptu.device) for im in batch["im"]]
-        ims_metas = batch["im_metas"]
-        ori_shape = ims_metas[0]["ori_shape"]
-        ori_shape = (ori_shape[0].item(), ori_shape[1].item())
-        filename = batch["im_metas"][0]["ori_filename"][0]
+        ims = [im.to(ptu.device) for im in batch[0]]
+        #ims_metas = batch["im_metas"]
+        #ori_shape = ims_metas[0]["ori_shape"] #TODO fix brutal hardcoding
+        ori_shape = (512, 512)
+        filename = batch[2]
 
         with amp_autocast():
             seg_pred = utils.inference(
@@ -105,8 +106,8 @@ def evaluate(
     scores = compute_metrics(
         val_seg_pred,
         val_seg_gt,
-        data_loader.unwrapped.n_cls,
-        ignore_index=IGNORE_LABEL,
+        15, #TODO remove brutal hard coded values
+        #ignore_index=IGNORE_LABEL,
         distributed=ptu.distributed,
     )
 

@@ -214,6 +214,8 @@ def main(
     ptu.set_gpu_mode(True)
     distributed.init_process()
 
+    print('got to 1')
+
     model, variant = load_model(model_path)
     patch_size = model.patch_size
     model.eval()
