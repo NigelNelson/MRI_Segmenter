@@ -95,14 +95,14 @@ def main(model_path, input_dir, output_dir, gpu):
 
         print('IMs SHAPE:', im.shape)
 
-        im = im.to(ptu.device).unsqueeze(0)
+        im = im.to(ptu.device)
 
         im_meta = dict(flip=False)
         logits = inference(
             model,
             [im],
             [im_meta],
-            ori_shape=im.shape[2:4],
+            ori_shape=im.shape[1:3],
             window_size=variant["inference_kwargs"]["window_size"],
             window_stride=variant["inference_kwargs"]["window_stride"],
             batch_size=2,

@@ -91,7 +91,7 @@ def evaluate(
             seg_pred = utils.inference(
                 model_without_ddp,
                 ims,
-                ims_metas,
+                ims,
                 ori_shape,
                 window_size,
                 window_stride,
@@ -100,7 +100,7 @@ def evaluate(
             seg_pred = seg_pred.argmax(0)
 
         seg_pred = seg_pred.cpu().numpy()
-        val_seg_pred[filename] = seg_pred
+        val_seg_pred[filename[0]] = seg_pred
 
     val_seg_pred = gather_data(val_seg_pred)
     scores = compute_metrics(

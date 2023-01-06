@@ -90,6 +90,9 @@ def unpadding(y, target_size):
 
 
 def resize(im, smaller_size):
+    im = im.unsqueeze(0)
+    print('HERE')
+    print(im.shape[2:])
     h, w = im.shape[2:]
     if h < w:
         ratio = w / h
@@ -106,6 +109,7 @@ def resize(im, smaller_size):
 
 def sliding_window(im, flip, window_size, window_stride):
     B, C, H, W = im.shape
+    #C, H, W = im.shape
     ws = window_size
 
     windows = {"crop": [], "anchors": []}
@@ -160,9 +164,10 @@ def inference(
     C = model.n_cls
     seg_map = torch.zeros((C, ori_shape[0], ori_shape[1]), device=ptu.device)
     for im, im_metas in zip(ims, ims_metas):
+        #im = im.unsqueeze(0)
         im = im.to(ptu.device)
         im = resize(im, window_size)
-        flip = im_metas["flip"]
+        flip = False #im_metas["flip"] TODO remove terrible hardcode
         windows = sliding_window(im, flip, window_size, window_stride)
         crops = torch.stack(windows.pop("crop"))[:, 0]
         B = len(crops)
