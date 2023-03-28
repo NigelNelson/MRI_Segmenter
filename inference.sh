@@ -37,7 +37,7 @@ mkdir -p $logdir
 container="/data/containers/msoe-pytorch-20.07-py3.sif"
 
 # Command to run inside container
-command="python -m segm.inference --model-path seg_tiny_mask_tmp/checkpoint.pth -i images/ -o segm/output_segs/"
+command="python -m segm.inference --model-path unet_200/checkpoint.pth -i /home/nelsonni/laviolette/segmenter/ade20k/ade20k/release_test/testing/ -o segm/inference_segs/unet_Rosie_Paper/"
 
 
 # Execute singularity container on node.

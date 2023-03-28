@@ -1,0 +1,38 @@
+MOFED version '4.9-2.2.6' not available in this container.
+No matching alternate version found.
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.6/runpy.py", line 193, in _run_module_as_main
+    "__main__", mod_spec)
+  File "/opt/conda/lib/python3.6/runpy.py", line 85, in _run_code
+    exec(code, run_globals)
+  File "/home/nelsonni/laviolette/segmenter/segm/inference.py", line 150, in <module>
+    main()
+  File "/opt/conda/lib/python3.6/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/opt/conda/lib/python3.6/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/opt/conda/lib/python3.6/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/opt/conda/lib/python3.6/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/home/nelsonni/laviolette/segmenter/segm/inference.py", line 136, in main
+    logits = model.forward(im)[0]
+  File "/home/nelsonni/laviolette/segmenter/segm/unet/unet_model.py", line 26, in forward
+    x1 = self.inc(x)
+  File "/home/nelsonni/.local/lib/python3.6/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/nelsonni/laviolette/segmenter/segm/unet/unet_parts.py", line 25, in forward
+    return self.double_conv(x)
+  File "/home/nelsonni/.local/lib/python3.6/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/nelsonni/.local/lib/python3.6/site-packages/torch/nn/modules/container.py", line 141, in forward
+    input = module(input)
+  File "/home/nelsonni/.local/lib/python3.6/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/nelsonni/.local/lib/python3.6/site-packages/torch/nn/modules/conv.py", line 446, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+  File "/home/nelsonni/.local/lib/python3.6/site-packages/torch/nn/modules/conv.py", line 443, in _conv_forward
+    self.padding, self.dilation, self.groups)
+RuntimeError: Expected 4-dimensional input for 4-dimensional weight [64, 3, 3, 3], but got 3-dimensional input of size [3, 512, 512] instead

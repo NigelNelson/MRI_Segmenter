@@ -1,0 +1,65 @@
+MOFED version '4.9-2.2.6' not available in this container.
+No matching alternate version found.
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+torch.Size([512, 512])
+torch.Size([512, 512])
+torch.Size([512, 512])
+torch.Size([512, 512])
+torch.Size([512, 512])
+torch.Size([512, 512])
+torch.Size([512, 512])
+torch.Size([512, 512])
+torch.Size([512, 512])
+torch.Size([512, 512])
+torch.Size([512, 512])
+torch.Size([512, 512])
+torch.Size([512, 512])
+torch.Size([512, 512])
+torch.Size([512, 512])
+torch.Size([512, 512])
+torch.Size([512, 512])
+torch.Size([512, 512])
+torch.Size([512, 512])
+torch.Size([512, 512])
+torch.Size([512, 512])

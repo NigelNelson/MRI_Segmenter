@@ -18,7 +18,7 @@
 #SBATCH --nodes=1
 
 # The number of GPUs to request
-#SBATCH --gpus=4
+#SBATCH --gpus=2
 
 # The number of CPUs to request per GPU
 #SBATCH --cpus-per-gpu=16
@@ -26,17 +26,18 @@
 # Prevent out file from being generated
 #SBATCH --output=./segm/outputs/slurm-%j.out
 
+#SBATCH --nodelist=dh-dgx1-3
+
 
 # Create logging directory
-now=$(date +"%m-%d-%y|%H:%M:%S")
-logdir="./segm/outputs/${now}" 
+now=$(date +"%m-%d-%y|%H:%M:%S") 
 
 # Path to container
 #container="/data/containers/msoe-tensorflow-20.07-tf2-py3.sif"
 container="/data/containers/msoe-pytorch-20.07-py3.sif"
 
 # Command to run inside container
-command="python -m segm.train --log-dir seg_tiny_mask_tmp --dataset ade20k --backbone vit_tiny_patch16_384 --decoder mask_transformer"
+command="python -m segm.train --log-dir seg_tiny_mask_retrain --dataset ade20k --no-resume --backbone vit_tiny_patch16_384 --decoder mask_transformer --batch-size 16 --epochs 300 -lr 0.001"
 
 # Define dataset location
 location="~/laviolette/segmenter/ade20k"

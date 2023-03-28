@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "./generate_GT_masks.py", line 30, in <module>
+    hist_points, mri_points = load_points(points_file)
+  File "/home/nelsonni/laviolette/mri_histology_toolkit/mri_histology_toolkit/data_loader.py", line 69, in load_points
+    points = pd.read_csv(point_path, header=None, engine='python').to_numpy().astype(int)
+  File "/usr/local/lib/python3.8/dist-packages/pandas/util/_decorators.py", line 311, in wrapper
+    return func(*args, **kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/pandas/io/parsers/readers.py", line 586, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "/usr/local/lib/python3.8/dist-packages/pandas/io/parsers/readers.py", line 482, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "/usr/local/lib/python3.8/dist-packages/pandas/io/parsers/readers.py", line 811, in __init__
+    self._engine = self._make_engine(self.engine)
+  File "/usr/local/lib/python3.8/dist-packages/pandas/io/parsers/readers.py", line 1040, in _make_engine
+    return mapping[engine](self.f, **self.options)  # type: ignore[call-arg]
+  File "/usr/local/lib/python3.8/dist-packages/pandas/io/parsers/python_parser.py", line 96, in __init__
+    self._open_handles(f, kwds)
+  File "/usr/local/lib/python3.8/dist-packages/pandas/io/parsers/base_parser.py", line 222, in _open_handles
+    self.handles = get_handle(
+  File "/usr/local/lib/python3.8/dist-packages/pandas/io/common.py", line 702, in get_handle
+    handle = open(
+FileNotFoundError: [Errno 2] No such file or directory: '/data/ur/bukowy/LaViolette_Data/Prostates/1101/6/histmri_controlPoints_small_recon_8_GT.csv'

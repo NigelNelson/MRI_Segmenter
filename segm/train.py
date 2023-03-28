@@ -1,15 +1,9 @@
 import sys
-
-import sys
 import os
 from pathlib import Path
-sys.path.append(str(Path.cwd().parent) + '/mri_histology_toolkit')
-sys.path.append(str(Path.cwd().parent) + '/homologous_point_prediction')
-
-# from homologous_point_prediction.evaluate import evaluate, evaluate_rotation
-
-from homologous_point_prediction.data_processing.seg_data_loader import SegDataLoader
-
+sys.path.append(str(Path.cwd().parent))
+from segm.data_processing.seg_data_loader import SegDataLoader
+from segm.data_processing.transforms import RandomCrop, RandomFlip, ElasticTransform, ToColor
 import yaml
 import json
 import numpy as np
@@ -17,6 +11,10 @@ import torch
 import click
 import argparse
 from torch.nn.parallel import DistributedDataParallel as DDP
+from torch.utils.data.distributed import DistributedSampler
+from torch.utils.data import DataLoader
+from datetime import datetime
+from torchvision import transforms
 
 from segm.utils import distributed
 import segm.utils.torch as ptu
@@ -32,6 +30,14 @@ from contextlib import suppress
 
 from segm.utils.distributed import sync_model
 from segm.engine import train_one_epoch, evaluate
+
+from sklearn.utils.class_weight import compute_class_weight
+
+import wandb
+
+global_learning_rate = 0.001
+
+wandb.login()
 
 
 @click.command(help="")
@@ -77,6 +83,8 @@ def main(
     amp,
     resume,
 ):
+
+    learning_rate = global_learning_rate
     # start distributed mode
     ptu.set_gpu_mode(True)
     distributed.init_process()
@@ -106,6 +114,8 @@ def main(
     model_cfg["drop_path_rate"] = drop_path
     decoder_cfg["name"] = decoder
     model_cfg["decoder"] = decoder_cfg
+
+    print('here')
 
     # dataset config
     world_batch_size = dataset_cfg["batch_size"]
@@ -173,11 +183,19 @@ def main(
     # dataset
     dataset_kwargs = variant["dataset_kwargs"]
 
-    training_data_config = '/home/nelsonni/laviolette/homologous_point_prediction/homologous_point_prediction/data_processing/metadata/seg_train_config.json'
-    validation_data_config = '/home/nelsonni/laviolette/homologous_point_prediction/homologous_point_prediction/data_processing/metadata/seg_validation_config.json'
+    train_augs = transforms.Compose([RandomCrop(400), RandomFlip(), ToColor()])
+    val_augs = ToColor()
 
-    train_loader = SegDataLoader(training_data_config, batch_size=batch_size)
-    val_loader = SegDataLoader(validation_data_config, batch_size=1)
+    training_data_config = "/home/nelsonni/laviolette/method_analysis/configs/seg_train_config.json"
+    validation_data_config = "/home/nelsonni/laviolette/method_analysis/configs/seg_val_config.json"
+
+    train_loader = SegDataLoader(training_data_config, transform=train_augs)
+    val_loader = SegDataLoader(validation_data_config, transform=val_augs)
+
+    train_loader = DataLoader(train_loader, batch_size=batch_size,
+                        shuffle=False, sampler=DistributedSampler(train_loader))
+    val_loader = DataLoader(val_loader, batch_size=1,
+                        shuffle=False, sampler=DistributedSampler(val_loader))
 
     #train_loader = create_dataset(dataset_kwargs)
     val_kwargs = dataset_kwargs.copy()
@@ -186,7 +204,7 @@ def main(
     val_kwargs["crop"] = False
     #val_loader = create_dataset(val_kwargs)
     # n_cls = train_loader.unwrapped.n_cls
-    n_cls = 15 #TODO fix sloppy code
+    n_cls = 8 #TODO fix sloppy code
 
     # model
     net_kwargs = variant["net_kwargs"]
@@ -237,8 +255,10 @@ def main(
         f.write(variant_str)
 
     # train
-    start_epoch = variant["algorithm_kwargs"]["start_epoch"]
-    num_epochs = variant["algorithm_kwargs"]["num_epochs"]
+    # start_epoch = variant["algorithm_kwargs"]["start_epoch"]
+    start_epoch = 0 # TODO remove slop
+    num_epochs = epochs # TODO remove slop
+    # num_epochs = variant["algorithm_kwargs"]["num_epochs"]
     eval_freq = variant["algorithm_kwargs"]["eval_freq"]
 
     model_without_ddp = model
@@ -249,72 +269,104 @@ def main(
 
     val_seg_gt = {}
     for batch in val_loader:
-        val_seg_gt[batch[2][0]] = batch[1][0]
+        val_seg_gt[batch['patient'][0]] = batch['seg'][0]
 
     print(f"Train dataset length: {len(train_loader) * batch_size}")
     print(f"Val dataset length: {len(val_loader)}")
     print(f"Encoder parameters: {num_params(model_without_ddp.encoder)}")
     print(f"Decoder parameters: {num_params(model_without_ddp.decoder)}")
-
-    for epoch in range(start_epoch, num_epochs):
-        # train for one epoch
-        train_logger = train_one_epoch(
-            model,
-            train_loader,
-            optimizer,
-            lr_scheduler,
-            epoch,
-            amp_autocast,
-            loss_scaler,
+    print('learning RATE:', lr)
+    
+    wandb_config = dict(
+        epochs=num_epochs,
+        batch_size=batch_size,
+        lr=lr,
+        weight_decay=weight_decay,
+        window_size=window_size,
+        classes=n_cls
         )
 
-        # save checkpoint
-        if ptu.dist_rank == 0:
-            snapshot = dict(
-                model=model_without_ddp.state_dict(),
-                optimizer=optimizer.state_dict(),
-                n_cls=model_without_ddp.n_cls,
-                lr_scheduler=lr_scheduler.state_dict(),
-            )
-            if loss_scaler is not None:
-                snapshot["loss_scaler"] = loss_scaler.state_dict()
-            snapshot["epoch"] = epoch
-            torch.save(snapshot, checkpoint_path)
+    pixel_values = torch.tensor([])
+    for batch in train_loader:
+        if len(batch['seg']) > 1:
+            for i in range(len(batch['seg'])):
+                pixel_values = torch.cat((pixel_values, batch['seg'][i].flatten())) 
+        else:
+            pixel_values = torch.cat((pixel_values, batch['seg'][0].flatten()))
 
-        # evaluate
-        eval_epoch = epoch % eval_freq == 0 or epoch == num_epochs - 1
-        if eval_epoch:
-            eval_logger = evaluate(
+    counts = pixel_values.unique(return_counts=True)
+    class_weights = []
+
+    for count in counts[1]:
+        class_weights.append(sum(counts[1]) / (n_cls * count))
+    class_weights = torch.tensor(class_weights)
+        
+    with wandb.init(project='segmenter_training', config=wandb_config):
+        
+        wandb.watch(model, log='all', log_freq=10)
+
+        for epoch in range(start_epoch, num_epochs):
+            # train for one epoch
+            train_logger = train_one_epoch(
                 model,
-                val_loader,
-                val_seg_gt,
-                window_size,
-                window_stride,
+                train_loader,
+                optimizer,
+                lr_scheduler,
+                epoch,
                 amp_autocast,
+                loss_scaler,
+                class_weights
             )
-            print(f"Stats [{epoch}]:", eval_logger, flush=True)
-            print("")
 
-        # log stats
-        if ptu.dist_rank == 0:
-            train_stats = {
-                k: meter.global_avg for k, meter in train_logger.meters.items()
-            }
-            val_stats = {}
+            # save checkpoint
+            if ptu.dist_rank == 0:
+                snapshot = dict(
+                    model=model_without_ddp.state_dict(),
+                    optimizer=optimizer.state_dict(),
+                    n_cls=model_without_ddp.n_cls,
+                    lr_scheduler=lr_scheduler.state_dict(),
+                )
+                if loss_scaler is not None:
+                    snapshot["loss_scaler"] = loss_scaler.state_dict()
+                snapshot["epoch"] = epoch
+                torch.save(snapshot, checkpoint_path)
+
+            # evaluate
+            eval_epoch = epoch % eval_freq == 0 or epoch == num_epochs - 1
             if eval_epoch:
-                val_stats = {
-                    k: meter.global_avg for k, meter in eval_logger.meters.items()
+                eval_logger = evaluate(
+                    model,
+                    val_loader,
+                    val_seg_gt,
+                    window_size,
+                    window_stride,
+                    amp_autocast,
+                )
+                print(f"Stats [{epoch}]:", eval_logger, flush=True)
+                print("")
+
+            # log stats
+            if ptu.dist_rank == 0:
+                train_stats = {
+                    k: meter.global_avg for k, meter in train_logger.meters.items()
                 }
+                val_stats = {}
+                if eval_epoch:
+                    val_stats = {
+                        k: meter.global_avg for k, meter in eval_logger.meters.items()
+                    }
 
-            log_stats = {
-                **{f"train_{k}": v for k, v in train_stats.items()},
-                **{f"val_{k}": v for k, v in val_stats.items()},
-                "epoch": epoch,
-                "num_updates": (epoch + 1) * len(train_loader),
-            }
+                log_stats = {
+                    **{f"train_{k}": v for k, v in train_stats.items()},
+                    **{f"val_{k}": v for k, v in val_stats.items()},
+                    "epoch": epoch,
+                    "num_updates": (epoch + 1) * len(train_loader),
+                }
+                
+                wandb.log(log_stats, step=log_stats['epoch'])
 
-            with open(log_dir / "log.txt", "a") as f:
-                f.write(json.dumps(log_stats) + "\n")
+                with open(log_dir / "log.txt", "a") as f:
+                    f.write(json.dumps(log_stats) + "\n")
 
     distributed.barrier()
     distributed.destroy_process()
@@ -322,4 +374,5 @@ def main(
 
 
 if __name__ == "__main__":
+    global_learning_rate = 0.1
     main()

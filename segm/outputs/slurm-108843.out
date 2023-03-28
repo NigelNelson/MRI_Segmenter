@@ -1,0 +1,15 @@
+MOFED version '4.9-2.2.6' not available in this container.
+No matching alternate version found.
+wandb: Currently logged in as: nigelnel (nigel_nelson). Use `wandb login --relogin` to force relogin
+Starting process with rank 0...
+Process 0 is connected.
+All processes are connected.
+wandb: wandb version 0.14.0 is available!  To upgrade, please run:
+wandb:  $ pip install wandb --upgrade
+wandb: Tracking run with wandb version 0.13.10
+wandb: Run data is saved locally in /home/nelsonni/laviolette/segmenter/wandb/run-20230314_195617-mp0s5dhn
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run eternal-meadow-25
+wandb: ⭐️ View project at https://wandb.ai/nigel_nelson/segmenter_training
+wandb: 🚀 View run at https://wandb.ai/nigel_nelson/segmenter_training/runs/mp0s5dhn
+slurmstepd: error: *** JOB 108843 ON dh-dgx1-2 CANCELLED AT 2023-03-14T20:05:01 ***

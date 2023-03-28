@@ -1,0 +1,32 @@
+MOFED version '4.9-2.2.6' not available in this container.
+No matching alternate version found.
+Starting process with rank 0...
+Process 0 is connected.
+All processes are connected.
+/home/nelsonni/.local/lib/python3.6/site-packages/torch/nn/functional.py:3635: UserWarning: Default upsampling behavior when mode=bilinear is changed to align_corners=False since 0.4.0. Please specify align_corners=True if the old behavior is desired. See the documentation of nn.Upsample for details.
+  "See the documentation of nn.Upsample for details.".format(mode)
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.6/runpy.py", line 193, in _run_module_as_main
+    "__main__", mod_spec)
+  File "/opt/conda/lib/python3.6/runpy.py", line 85, in _run_code
+    exec(code, run_globals)
+  File "/home/nelsonni/laviolette/segmenter/segm/train.py", line 324, in <module>
+    main()
+  File "/opt/conda/lib/python3.6/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/opt/conda/lib/python3.6/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/opt/conda/lib/python3.6/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/opt/conda/lib/python3.6/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/home/nelsonni/laviolette/segmenter/segm/train.py", line 217, in main
+    model.load_state_dict(checkpoint["model"])
+  File "/home/nelsonni/.local/lib/python3.6/site-packages/torch/nn/modules/module.py", line 1483, in load_state_dict
+    self.__class__.__name__, "\n\t".join(error_msgs)))
+RuntimeError: Error(s) in loading state_dict for Segmenter:
+	size mismatch for decoder.cls_emb: copying a param with shape torch.Size([1, 15, 192]) from checkpoint, the shape in current model is torch.Size([1, 8, 192]).
+	size mismatch for decoder.mask_norm.weight: copying a param with shape torch.Size([15]) from checkpoint, the shape in current model is torch.Size([8]).
+	size mismatch for decoder.mask_norm.bias: copying a param with shape torch.Size([15]) from checkpoint, the shape in current model is torch.Size([8]).
+got training
+Resuming training from checkpoint: seg_tiny_mask_retrain/checkpoint.pth

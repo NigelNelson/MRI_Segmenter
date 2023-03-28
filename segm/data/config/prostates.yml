@@ -1,0 +1,112 @@
+- color:
+  - 120
+  - 120
+  - 120
+  id: 0
+  isthing: 0
+  name: misc
+- color:
+  - 180
+  - 120
+  - 120
+  id: 1
+  isthing: 0
+  name: guess1
+- color:
+  - 6
+  - 230
+  - 230
+  id: 2
+  isthing: 0
+  name: guess2
+- color:
+  - 80
+  - 50
+  - 50
+  id: 3
+  isthing: 0
+  name: guess3
+- color:
+  - 4
+  - 200
+  - 3
+  id: 4
+  isthing: 0
+  name: guess4
+- color:
+  - 120
+  - 120
+  - 80
+  id: 5
+  isthing: 0
+  name: guess5
+- color:
+  - 140
+  - 140
+  - 140
+  id: 6
+  isthing: 0
+  name: guess6
+- color:
+  - 204
+  - 5
+  - 255
+  id: 7
+  isthing: 0
+  name: guess7
+- color:
+  - 230
+  - 230
+  - 230
+  id: 8
+  isthing: 0
+  name: guess8
+- color:
+  - 4
+  - 250
+  - 7
+  id: 9
+  isthing: 0
+  name: guess9
+- color:
+  - 224
+  - 5
+  - 255
+  id: 10
+  isthing: 0
+  name: guess10
+- color:
+  - 235
+  - 255
+  - 7
+  id: 11
+  isthing: 0
+  name: guess11
+- color:
+  - 150
+  - 5
+  - 61
+  id: 12
+  isthing: 0
+  name: guess12
+- color:
+  - 120
+  - 120
+  - 70
+  id: 13
+  isthing: 0
+  name: guess13
+- color:
+  - 8
+  - 255
+  - 51
+  id: 14
+  isthing: 0
+  name: guess14
+- color:
+  - 255
+  - 6
+  - 82
+  id: 15
+  isthing: 0
+  name: guess15

@@ -1,0 +1,102 @@
+MOFED version '4.9-2.2.6' not available in this container.
+No matching alternate version found.
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1102/8
+'NoneType' object has no attribute 'shape'
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1102/MRI
+'NoneType' object has no attribute 'shape'
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1152/11
+'NoneType' object has no attribute 'shape'
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1152/12
+'NoneType' object has no attribute 'shape'
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1152/13
+'NoneType' object has no attribute 'shape'
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1152/5
+'NoneType' object has no attribute 'shape'
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1152/8
+'NoneType' object has no attribute 'shape'
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1152/9
+'NoneType' object has no attribute 'shape'
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1152/MRI
+'NoneType' object has no attribute 'shape'
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1190/14
+'NoneType' object has no attribute 'shape'
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1190/15
+'NoneType' object has no attribute 'shape'
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1190/16
+'NoneType' object has no attribute 'shape'
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1190/9
+'NoneType' object has no attribute 'shape'
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1190/MRI
+'NoneType' object has no attribute 'shape'
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1133/10
+'NoneType' object has no attribute 'shape'
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1133/11
+'NoneType' object has no attribute 'shape'
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1133/12
+'NoneType' object has no attribute 'shape'
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1133/13
+'NoneType' object has no attribute 'shape'
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1133/9
+'NoneType' object has no attribute 'shape'
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1133/MRI
+'NoneType' object has no attribute 'shape'
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1106/8
+'NoneType' object has no attribute 'shape'
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1106/MRI
+'NoneType' object has no attribute 'shape'
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1121/6
+'NoneType' object has no attribute 'shape'
+Skipping /data/ur/bukowy/LaViolette_Data/Prostates/1121/MRI
+'NoneType' object has no attribute 'shape'
+torch.Size([512, 512])
+0.0,
+torch.Size([512, 512])
+0.0,
+torch.Size([512, 512])
+0.0,
+torch.Size([512, 512])
+0.0,
+torch.Size([512, 512])
+0.0,
+torch.Size([512, 512])
+0.0,
+torch.Size([512, 512])
+0.0,
+torch.Size([512, 512])
+0.0,
+torch.Size([512, 512])
+0.0,
+torch.Size([512, 512])
+0.0,
+torch.Size([512, 512])
+0.0,
+torch.Size([512, 512])
+0.0,
+torch.Size([512, 512])
+0.0,
+torch.Size([512, 512])
+0.0,
+torch.Size([512, 512])
+0.0,
+torch.Size([512, 512])
+0.0,
+torch.Size([512, 512])
+0.0,
+torch.Size([512, 512])
+0.0,
+torch.Size([512, 512])
+0.0,
+torch.Size([512, 512])
+0.0,
+torch.Size([512, 512])
+0.0,
+torch.Size([512, 512])
+0.0,
+torch.Size([512, 512])
+0.0,
+torch.Size([512, 512])
+0.0,
+pixel_accuracy: 82.16
+mean_accuracy: 32.24
+mean_iou: 12.13
+inference: single_scale

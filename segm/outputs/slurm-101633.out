@@ -1,0 +1,30 @@
+MOFED version '4.9-2.2.6' not available in this container.
+No matching alternate version found.
+/home/nelsonni/.local/lib/python3.6/site-packages/torch/nn/functional.py:3635: UserWarning: Default upsampling behavior when mode=bilinear is changed to align_corners=False since 0.4.0. Please specify align_corners=True if the old behavior is desired. See the documentation of nn.Upsample for details.
+  "See the documentation of nn.Upsample for details.".format(mode)
+  0%|                                                  | 0/3352 [00:00<?, ?it/s]
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.6/runpy.py", line 193, in _run_module_as_main
+    "__main__", mod_spec)
+  File "/opt/conda/lib/python3.6/runpy.py", line 85, in _run_code
+    exec(code, run_globals)
+  File "/home/nelsonni/laviolette/segmenter/segm/inference.py", line 127, in <module>
+    main()
+  File "/opt/conda/lib/python3.6/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/opt/conda/lib/python3.6/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/opt/conda/lib/python3.6/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/opt/conda/lib/python3.6/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/home/nelsonni/laviolette/segmenter/segm/inference.py", line 67, in main
+    batch_size=2,
+  File "/home/nelsonni/laviolette/segmenter/segm/model/utils.py", line 169, in inference
+    im = resize(im, window_size)
+  File "/home/nelsonni/laviolette/segmenter/segm/model/utils.py", line 96, in resize
+    h, w = im.shape[2:]
+ValueError: too many values to unpack (expected 2)
+got to 2
+HERE
+torch.Size([3, 1024, 1024])

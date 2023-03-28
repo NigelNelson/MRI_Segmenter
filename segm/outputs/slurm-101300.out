@@ -1,0 +1,675 @@
+MOFED version '4.9-2.2.6' not available in this container.
+No matching alternate version found.
+Starting process with rank 0...
+Process 0 is connected.
+All processes are connected.
+/home/nelsonni/.local/lib/python3.6/site-packages/torch/nn/functional.py:3635: UserWarning: Default upsampling behavior when mode=bilinear is changed to align_corners=False since 0.4.0. Please specify align_corners=True if the old behavior is desired. See the documentation of nn.Upsample for details.
+  "See the documentation of nn.Upsample for details.".format(mode)
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+Configuration:
+algorithm_kwargs:
+  batch_size: 8
+  eval_freq: 2
+  num_epochs: 64
+  start_epoch: 0
+amp: false
+dataset_kwargs:
+  batch_size: 8
+  crop_size: 512
+  dataset: ade20k
+  image_size: 512
+  normalization: vit
+  num_workers: 10
+  split: train
+inference_kwargs:
+  im_size: 512
+  window_size: 512
+  window_stride: 512
+log_dir: seg_tiny_mask_retrain
+net_kwargs:
+  backbone: vit_tiny_patch16_384
+  d_model: 192
+  decoder:
+    drop_path_rate: 0.0
+    dropout: 0.1
+    n_cls: 8
+    n_layers: 2
+    name: mask_transformer
+  distilled: false
+  drop_path_rate: 0.1
+  dropout: 0.0
+  image_size: !!python/tuple
+  - 512
+  - 512
+  n_cls: 8
+  n_heads: 3
+  n_layers: 12
+  normalization: vit
+  patch_size: 16
+optimizer_kwargs:
+  clip_grad: null
+  epochs: 64
+  iter_max: 2432
+  iter_warmup: 0.0
+  lr: 0.001
+  min_lr: 1.0e-05
+  momentum: 0.9
+  opt: sgd
+  poly_power: 0.9
+  poly_step_size: 1
+  sched: polynomial
+  weight_decay: 0.0
+resume: true
+version: normal
+world_batch_size: 8
+
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1126/7
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1126/8
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1148/8
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1125/8
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1126/6
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1148/7
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1125/10
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1126/11
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1125/9
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1148/9
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1148/5
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1126/9
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1126/10
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1125/7
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1148/6
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1125/11
+Train dataset length: 304
+Val dataset length: 16
+Encoder parameters: 5876392
+Decoder parameters: 1002448
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1200/17
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1204/11
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1149/5
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1121/8
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1144/6
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1118/13
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1127/13
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1129/7
+'NoneType' object has no attribute 'shape'
+Epoch: [0]  [ 0/38]  eta: 0:00:05  loss: 2.5302 (2.5302)  learning_rate: 0.0010 (0.0010)  time: 0.1542  data: 0.0426  max mem: 1767
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.6/runpy.py", line 193, in _run_module_as_main
+    "__main__", mod_spec)
+  File "/opt/conda/lib/python3.6/runpy.py", line 85, in _run_code
+    exec(code, run_globals)
+  File "/home/nelsonni/laviolette/segmenter/segm/train.py", line 323, in <module>
+    main()
+  File "/opt/conda/lib/python3.6/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/opt/conda/lib/python3.6/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/opt/conda/lib/python3.6/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/opt/conda/lib/python3.6/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/home/nelsonni/laviolette/segmenter/segm/train.py", line 266, in main
+    loss_scaler,
+  File "/home/nelsonni/laviolette/segmenter/segm/engine.py", line 30, in train_one_epoch
+    for batch in logger.log_every(data_loader, print_freq, header):
+  File "/home/nelsonni/laviolette/segmenter/segm/utils/logger.py", line 137, in log_every
+    for obj in iterable:
+  File "/home/nelsonni/.local/lib/python3.6/site-packages/keras/utils/data_utils.py", line 483, in __iter__
+    for item in (self[i] for i in range(len(self))):
+  File "/home/nelsonni/.local/lib/python3.6/site-packages/keras/utils/data_utils.py", line 483, in <genexpr>
+    for item in (self[i] for i in range(len(self))):
+  File "/home/nelsonni/laviolette/homologous_point_prediction/homologous_point_prediction/data_processing/seg_data_loader.py", line 124, in __getitem__
+    return self.extract_data(batch_sample_dirs)
+  File "/home/nelsonni/laviolette/homologous_point_prediction/homologous_point_prediction/data_processing/seg_data_loader.py", line 138, in extract_data
+    mris = torch.stack(mris)
+RuntimeError: stack expects a non-empty TensorList
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1107/6
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1129/5
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1187/5
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1154/7
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1158/13
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1118/10
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1140/11
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1191/17
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1107/13
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1185/11
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1137/11
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1155/8
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1187/14
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1190/13
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1141/9
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1144/8
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1154/5
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1154/10
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1121/11
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1142/9
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1141/12
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1190/14
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1107/8
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1127/6
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1203/8
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1191/13
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1133/5
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1149/12
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1149/11
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1159/12
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1142/7
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1107/11
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1144/9
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1204/18
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1134/7
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1124/10
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1191/12
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1137/6
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1159/6
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1188/6
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1122/6
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1132/9
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1127/8
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1131/9
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1132/10
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1118/14
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1149/10
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1123/9
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1136/13
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1158/14
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1124/7
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1122/10
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1137/7
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1200/8
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1152/9
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1140/10
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1154/15
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1188/11
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1131/7
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1200/14
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1147/9
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1159/14
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1140/15
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1204/17
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1159/10
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1149/7
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1185/9
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1133/11
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1121/9
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1138/10
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1123/11
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1159/9
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1159/8
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1159/7
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1147/8
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1154/11
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1124/8
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1147/7
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1136/15
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1131/5
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1158/9
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1140/13
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1152/7
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1147/14
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1118/15
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1203/13
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1133/6
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1118/8
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1138/5
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1128/6
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1124/5
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1129/8
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1137/5
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1187/8
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1200/11
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1190/15
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1204/9
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1187/9
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1159/5
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1155/12
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1188/8
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1147/11
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1152/12
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1128/10
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1204/13
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1138/6
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1141/8
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1154/12
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1190/11
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1203/11
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1123/7
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1204/16
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1121/7
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1155/7
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1203/14
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1124/11
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1144/7
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1159/13
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1132/13
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1191/14
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1136/6
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1155/14
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1107/5
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1124/9
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1144/13
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1185/10
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1144/11
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1123/5
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1147/13
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1190/12
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1133/8
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1203/12
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1147/15
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1140/8
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1133/7
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1136/12
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1128/13
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1190/16
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1131/6
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1138/8
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1128/14
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1118/9
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1141/7
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1124/6
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1190/9
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1188/9
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1144/5
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1154/6
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1159/11
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1136/11
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1191/18
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1152/8
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1128/11
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1111/8
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1118/12
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1191/11
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1121/10
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1141/6
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1154/13
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1154/14
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1136/10
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1200/9
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1147/12
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1131/10
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1107/10
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1142/8
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1128/7
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1144/12
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1188/5
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1131/8
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1122/8
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1129/9
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1204/14
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1111/10
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1124/12
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1152/13
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1191/19
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1140/12
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1134/10
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1187/7
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1188/7
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1111/11
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1147/5
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1127/11
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1185/8
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1185/6
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1188/12
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1133/13
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1149/8
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1111/7
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1190/10
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1187/13
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1191/15
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1144/10
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1147/6
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1134/9
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1155/9
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1127/5
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1122/9
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1158/11
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1132/11
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1107/12
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1187/11
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1138/9
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1118/11
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1137/9
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1155/13
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1141/5
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1136/14
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1141/11
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1123/8
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1128/12
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1152/6
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1188/14
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1118/6
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1149/9
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1129/11
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1132/14
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1134/12
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1107/7
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1155/11
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1134/8
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1152/5
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1136/7
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1200/13
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1141/10
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1204/10
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1131/11
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1133/10
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1123/12
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1140/14
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1137/8
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1187/12
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1128/8
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1118/7
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1204/8
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1200/10
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1140/7
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1127/10
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1121/6
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1149/6
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1191/10
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1127/7
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1152/11
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1134/11
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1158/12
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1142/5
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1204/12
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1154/8
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1191/9
+'NoneType' object has no attribute 'shape'
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1147/10
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1152/10
+Success: /data/ur/bukowy/LaViolette_Data/Prostates/1132/6
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1203/10
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1140/16
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1133/9
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1129/10
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1111/5
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1124/13
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1138/7
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1200/16
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1123/6
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1127/9
+'NoneType' object has no attribute 'shape'
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1204/19
+'NoneType' object has no attribute 'shape'

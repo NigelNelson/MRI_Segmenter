@@ -1,0 +1,72 @@
+MOFED version '4.9-2.2.6' not available in this container.
+No matching alternate version found.
+wandb: Currently logged in as: nigelnel (nigel_nelson). Use `wandb login --relogin` to force relogin
+Starting process with rank 0...
+Process 0 is connected.
+All processes are connected.
+wandb: Agent Starting Run: 7wxsooeu with config:
+wandb: 	backbone: vit_base_patch32_384
+wandb: 	epochs: 300
+wandb: 	lr: 0.01
+wandb: 	random_crop_size: 350
+wandb: wandb version 0.14.0 is available!  To upgrade, please run:
+wandb:  $ pip install wandb --upgrade
+wandb: Tracking run with wandb version 0.13.10
+wandb: Run data is saved locally in /home/nelsonni/laviolette/segmenter/wandb/run-20230321_155433-7wxsooeu
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run revived-sweep-8
+wandb: ⭐️ View project at https://wandb.ai/nigel_nelson/ViT-Test_Sweep
+wandb: 🧹 View sweep at https://wandb.ai/nigel_nelson/ViT-Test_Sweep/sweeps/kab9pxvd
+wandb: 🚀 View run at https://wandb.ai/nigel_nelson/ViT-Test_Sweep/runs/7wxsooeu
+wandb: Waiting for W&B process to finish... (failed 1). Press Control-C to abort syncing.
+wandb: 🚀 View run revived-sweep-8 at: https://wandb.ai/nigel_nelson/ViT-Test_Sweep/runs/7wxsooeu
+wandb: Synced 6 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20230321_155433-7wxsooeu/logs
+Run 7wxsooeu errored: KeyError(None,)
+wandb: ERROR Run 7wxsooeu errored: KeyError(None,)
+wandb: Agent Starting Run: os6ky70r with config:
+wandb: 	backbone: vit_base_patch32_384
+wandb: 	epochs: 300
+wandb: 	lr: 0.0005
+wandb: 	random_crop_size: 400
+wandb: wandb version 0.14.0 is available!  To upgrade, please run:
+wandb:  $ pip install wandb --upgrade
+wandb: Tracking run with wandb version 0.13.10
+wandb: Run data is saved locally in /home/nelsonni/laviolette/segmenter/wandb/run-20230321_155459-os6ky70r
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run stellar-sweep-9
+wandb: ⭐️ View project at https://wandb.ai/nigel_nelson/ViT-Test_Sweep
+wandb: 🧹 View sweep at https://wandb.ai/nigel_nelson/ViT-Test_Sweep/sweeps/kab9pxvd
+wandb: 🚀 View run at https://wandb.ai/nigel_nelson/ViT-Test_Sweep/runs/os6ky70r
+wandb: Waiting for W&B process to finish... (failed 1). Press Control-C to abort syncing.
+wandb: 🚀 View run stellar-sweep-9 at: https://wandb.ai/nigel_nelson/ViT-Test_Sweep/runs/os6ky70r
+wandb: Synced 6 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20230321_155459-os6ky70r/logs
+Run os6ky70r errored: KeyError(None,)
+wandb: ERROR Run os6ky70r errored: KeyError(None,)
+wandb: Agent Starting Run: lu6j67t5 with config:
+wandb: 	backbone: vit_tiny_patch16_384
+wandb: 	epochs: 300
+wandb: 	lr: 0.01
+wandb: 	random_crop_size: 350
+wandb: wandb version 0.14.0 is available!  To upgrade, please run:
+wandb:  $ pip install wandb --upgrade
+wandb: Tracking run with wandb version 0.13.10
+wandb: Run data is saved locally in /home/nelsonni/laviolette/segmenter/wandb/run-20230321_155525-lu6j67t5
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run dauntless-sweep-10
+wandb: ⭐️ View project at https://wandb.ai/nigel_nelson/ViT-Test_Sweep
+wandb: 🧹 View sweep at https://wandb.ai/nigel_nelson/ViT-Test_Sweep/sweeps/kab9pxvd
+wandb: 🚀 View run at https://wandb.ai/nigel_nelson/ViT-Test_Sweep/runs/lu6j67t5
+wandb: Waiting for W&B process to finish... (failed 1). Press Control-C to abort syncing.
+wandb: 🚀 View run dauntless-sweep-10 at: https://wandb.ai/nigel_nelson/ViT-Test_Sweep/runs/lu6j67t5
+wandb: Synced 6 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20230321_155525-lu6j67t5/logs
+Run lu6j67t5 errored: KeyError(None,)
+wandb: ERROR Run lu6j67t5 errored: KeyError(None,)
+wandb: Agent Starting Run: kgcwxrsb with config:
+wandb: 	backbone: vit_tiny_patch16_384
+wandb: 	epochs: 300
+wandb: 	lr: 0.005
+wandb: 	random_crop_size: 300
+slurmstepd: error: *** JOB 109882 ON dh-dgx1-3 CANCELLED AT 2023-03-21T15:55:59 ***

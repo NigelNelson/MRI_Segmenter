@@ -1,0 +1,13 @@
+MOFED version '4.9-2.2.6' not available in this container.
+No matching alternate version found.
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.6/runpy.py", line 193, in _run_module_as_main
+    "__main__", mod_spec)
+  File "/opt/conda/lib/python3.6/runpy.py", line 85, in _run_code
+    exec(code, run_globals)
+  File "/home/nelsonni/laviolette/segmenter/segm/train.py", line 9, in <module>
+    from homologous_point_prediction.data_processing.seg_data_loader import SegDataLoader
+  File "/home/nelsonni/laviolette/homologous_point_prediction/homologous_point_prediction/data_processing/seg_data_loader.py", line 141
+    print(f'Num mris: ' mris.shape[0])
+                           ^
+SyntaxError: invalid syntax

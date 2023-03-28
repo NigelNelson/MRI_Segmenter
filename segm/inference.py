@@ -8,6 +8,8 @@ sys.path.append(str(Path.cwd().parent.parent) + '/homologous_point_prediction')
 
 from mri_histology_toolkit.data_loader import DataLoader
 
+import matplotlib.pyplot as plt
+
 import torch
 
 import cv2
@@ -28,6 +30,8 @@ from segm.data.utils import dataset_cat_description, seg_to_rgb
 from segm.model.factory import load_model
 from segm.model.utils import inference
 
+from segm.unet.unet_model import UNet
+
 
 @click.command()
 @click.option("--model-path", type=str)
@@ -37,13 +41,36 @@ from segm.model.utils import inference
 def main(model_path, input_dir, output_dir, gpu):
     ptu.set_gpu_mode(gpu)
 
-    model_dir = Path(model_path).parent
-    model, variant = load_model(model_path)
+    # model_dir = Path(model_path).parent
+    model_dir = Path(model_path)
+    model = UNet(n_channels=1, n_classes=8, bilinear=True)
+    data = torch.load(model_dir, map_location=ptu.device)
+    model.load_state_dict(data)
+    # model, variant = load_model(model_dir)
     model.to(ptu.device)
 
-    normalization_name = variant["prostates_dataset_kwargs"]["normalization"]
-    normalization = STATS[normalization_name]
-    cat_names, cat_colors = dataset_cat_description(ADE20K_CATS_PATH)
+    # normalization_name = variant["dataset_kwargs"]["normalization"]
+    # normalization = STATS[normalization_name]
+    # cat_names, cat_colors = dataset_cat_description(ADE20K_CATS_PATH)
+    cat_names = ['background',
+                '1',
+                '2',
+                '3',
+                '4',
+                '5',
+                '6',
+                '7'
+                ]
+    cat_colors = {
+        0: torch.tensor([0.0, 0.0, 0.0]).float(), 
+        1: torch.tensor([255.0, 51.0, 51.0]).float() / 255.0, # red
+        2: torch.tensor([255.0, 128.0, 0.0]).float() / 255.0, # orange
+        3: torch.tensor([255.0, 255.0, 0.0]).float() / 255.0, # yellow
+        4: torch.tensor([0.0, 255.0, 0.0]).float() / 255.0, # green
+        5: torch.tensor([0.0, 255.0, 255.0]).float() / 255.0, # cyan
+        6: torch.tensor([0.0, 0.0, 255.0]).float() / 255.0, # blue
+        7: torch.tensor([255.0, 0.0, 255.0]).float() / 255.0, # pink
+    }
 
     input_dir = Path(input_dir)
     output_dir = Path(output_dir)
@@ -73,27 +100,30 @@ def main(model_path, input_dir, output_dir, gpu):
 
     #     pil_blend = Image.blend(pil_im, pil_seg, 0.5).convert("RGB")
     #     pil_blend.save(output_dir / filename.name)
+        
+    #     save_name = str(output_dir) + "/" + "original_" + str(filename.name)
+
+    #     pil_im.save(save_name)
 
 
-    data_loader = DataLoader(config_path="/home/nelsonni/laviolette/method_analysis/configs/test_config.json")
+    data_loader = DataLoader(config_path="/home/nelsonni/laviolette/method_analysis/configs/seg_test_config.json")
     for data_dict in data_loader:
-        if True:
-            print(data_dict["patient"], data_dict["slide"])
-            print(len(data_dict["hist_points"]))
-            print(len(data_dict["mri_points"]))
+        # if True:
+        #     print(data_dict["patient"], data_dict["slide"])
+        #     print(len(data_dict["hist_points"]))
+        #     print(len(data_dict["mri_points"]))
 
         unmasked_mri = data_dict["unmasked_mri"]
 
-        unmasked_mri = cv2.cvtColor(unmasked_mri, cv2.COLOR_GRAY2RGB)
+        im = torch.from_numpy(unmasked_mri).unsqueeze(0)
+        
+        # unmasked_mri = cv2.cvtColor(unmasked_mri, cv2.COLOR_GRAY2RGB)
 
-        im = torch.from_numpy(unmasked_mri)
-        # im = im.unsqueeze(0)
-
-        im = F.normalize(im, normalization["mean"], normalization["std"])
-
-        im = im.permute(2, 0, 1)
-
-        print('IMs SHAPE:', im.shape)
+        # im = torch.from_numpy(unmasked_mri)
+        # im = F.normalize(im, 0.5, 0.5)
+        # im = im.permute(2, 0, 1)
+        
+        # norm_image = cv2.normalize(unmasked_mri, None, alpha = 0, beta = 255, norm_type = cv2.NORM_MINMAX, dtype = cv2.CV_32F)
 
         im = im.to(ptu.device)
 
@@ -103,20 +133,31 @@ def main(model_path, input_dir, output_dir, gpu):
             [im],
             [im_meta],
             ori_shape=im.shape[1:3],
-            window_size=variant["inference_kwargs"]["window_size"],
-            window_stride=variant["inference_kwargs"]["window_stride"],
-            batch_size=2,
+            window_size=512,
+            window_stride=512,
+            batch_size=1,
         )
+
+        
         seg_map = logits.argmax(0, keepdim=True)
-        seg_rgb = seg_to_rgb(seg_map, cat_colors)
-        seg_rgb = (255 * seg_rgb.cpu().numpy()).astype(np.uint8)
-        pil_seg = Image.fromarray(seg_rgb[0])
 
+
+        plt.imshow(im[0].cpu(), cmap='gray')
+        plt.imshow(seg_map[0].cpu(), alpha=0.5)
         file_name = data_dict['patient'] +'_' + data_dict['slide'] + '.jpg'
-        pil_im = im = Image.fromarray(np.uint8(unmasked_mri))
 
-        pil_blend = Image.blend(pil_im, pil_seg, 0.5).convert("RGB")
-        pil_blend.save(output_dir / file_name)
+        plt.savefig(output_dir / file_name)
+
+        # seg_rgb = seg_to_rgb(seg_map, cat_colors)
+        # seg_rgb = (255 * seg_rgb.cpu().numpy()).astype(np.uint8)
+        # pil_seg = Image.fromarray(seg_rgb[0])
+
+        # file_name = data_dict['patient'] +'_' + data_dict['slide'] + '.jpg'
+        # pil_im = Image.fromarray(np.uint8(norm_image))
+
+        # pil_blend = Image.blend(pil_im, pil_seg, 0.5).convert("RGB")
+        # pil_blend.save(output_dir / file_name)
+        
 
 
 if __name__ == "__main__":

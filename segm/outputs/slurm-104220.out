@@ -1,0 +1,240 @@
+MOFED version '4.9-2.2.6' not available in this container.
+No matching alternate version found.
+Starting process with rank 0...
+Process 0 is connected.
+All processes are connected.
+/home/nelsonni/.local/lib/python3.6/site-packages/torch/nn/functional.py:3635: UserWarning: Default upsampling behavior when mode=bilinear is changed to align_corners=False since 0.4.0. Please specify align_corners=True if the old behavior is desired. See the documentation of nn.Upsample for details.
+  "See the documentation of nn.Upsample for details.".format(mode)
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+Configuration:
+algorithm_kwargs:
+  batch_size: 8
+  eval_freq: 2
+  num_epochs: 64
+  start_epoch: 0
+amp: false
+dataset_kwargs:
+  batch_size: 8
+  crop_size: 512
+  dataset: ade20k
+  image_size: 512
+  normalization: vit
+  num_workers: 10
+  split: train
+inference_kwargs:
+  im_size: 512
+  window_size: 512
+  window_stride: 512
+log_dir: seg_tiny_mask_retrain
+net_kwargs:
+  backbone: vit_tiny_patch16_384
+  d_model: 192
+  decoder:
+    drop_path_rate: 0.0
+    dropout: 0.1
+    n_cls: 8
+    n_layers: 2
+    name: mask_transformer
+  distilled: false
+  drop_path_rate: 0.1
+  dropout: 0.0
+  image_size: !!python/tuple
+  - 512
+  - 512
+  n_cls: 8
+  n_heads: 3
+  n_layers: 12
+  normalization: vit
+  patch_size: 16
+optimizer_kwargs:
+  clip_grad: null
+  epochs: 64
+  iter_max: 2432
+  iter_warmup: 0.0
+  lr: 0.001
+  min_lr: 1.0e-05
+  momentum: 0.9
+  opt: sgd
+  poly_power: 0.9
+  poly_step_size: 1
+  sched: polynomial
+  weight_decay: 0.0
+resume: true
+version: normal
+world_batch_size: 8
+
+Num mris: 1
+Num segs: 1
+Num mris: 1
+Num segs: 1
+Num mris: 1
+Num segs: 1
+Num mris: 1
+Num segs: 1
+Num mris: 1
+Num segs: 1
+Num mris: 1
+Num segs: 1
+Num mris: 1
+Num segs: 1
+Num mris: 1
+Num segs: 1
+Num mris: 1
+Num segs: 1
+Num mris: 1
+Num segs: 1
+Num mris: 1
+Num segs: 1
+Num mris: 1
+Num segs: 1
+Num mris: 1
+Num segs: 1
+Num mris: 1
+Num segs: 1
+Num mris: 1
+Num segs: 1
+Num mris: 1
+Num segs: 1
+Train dataset length: 304
+Val dataset length: 16
+Encoder parameters: 5876392
+Decoder parameters: 1002448
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1154/14
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1149/12
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1127/9
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1132/13
+Num mris: 4
+Num segs: 4
+training values: tensor([0, 2])
+training values: tensor([0, 1, 2, 4])
+training values: tensor([0, 1, 2, 4, 5])
+training values: tensor([0, 2, 3, 4, 5])
+Epoch: [0]  [ 0/38]  eta: 0:00:07  loss: 2.7063 (2.7063)  learning_rate: 0.0010 (0.0010)  time: 0.1966  data: 0.0650  max mem: 2347
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+pixdim[1,2,3] should be non-zero; setting 0 dims to 1
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.6/runpy.py", line 193, in _run_module_as_main
+    "__main__", mod_spec)
+  File "/opt/conda/lib/python3.6/runpy.py", line 85, in _run_code
+    exec(code, run_globals)
+  File "/home/nelsonni/laviolette/segmenter/segm/train.py", line 323, in <module>
+    main()
+  File "/opt/conda/lib/python3.6/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/opt/conda/lib/python3.6/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/opt/conda/lib/python3.6/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/opt/conda/lib/python3.6/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/home/nelsonni/laviolette/segmenter/segm/train.py", line 266, in main
+    loss_scaler,
+  File "/home/nelsonni/laviolette/segmenter/segm/engine.py", line 30, in train_one_epoch
+    for batch in logger.log_every(data_loader, print_freq, header):
+  File "/home/nelsonni/laviolette/segmenter/segm/utils/logger.py", line 137, in log_every
+    for obj in iterable:
+  File "/home/nelsonni/.local/lib/python3.6/site-packages/keras/utils/data_utils.py", line 483, in __iter__
+    for item in (self[i] for i in range(len(self))):
+  File "/home/nelsonni/.local/lib/python3.6/site-packages/keras/utils/data_utils.py", line 483, in <genexpr>
+    for item in (self[i] for i in range(len(self))):
+  File "/home/nelsonni/laviolette/homologous_point_prediction/homologous_point_prediction/data_processing/seg_data_loader.py", line 124, in __getitem__
+    return self.extract_data(batch_sample_dirs)
+  File "/home/nelsonni/laviolette/homologous_point_prediction/homologous_point_prediction/data_processing/seg_data_loader.py", line 139, in extract_data
+    mris = torch.stack(mris)
+RuntimeError: stack expects a non-empty TensorList
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1118/12
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1128/13
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1133/9
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1136/14
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1134/9
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1154/5
+Num mris: 2
+Num segs: 2
+training values: tensor([0, 2, 3, 4, 5])
+training values: tensor([0, 1, 2, 3, 4, 5, 6])
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1191/9
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1152/8
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1136/11
+Num mris: 5
+Num segs: 5
+training values: tensor([0, 1, 2, 5])
+training values: tensor([0, 2, 3, 4])
+training values: tensor([0, 1, 2, 3, 4, 5, 6])
+training values: tensor([0, 2, 3, 4])
+training values: tensor([0, 1, 2, 4, 5])
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1149/6
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1123/6
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1133/13
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1129/7
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1128/14
+Num mris: 3
+Num segs: 3
+training values: tensor([0, 2, 4])
+training values: tensor([0, 1, 2, 4])
+training values: tensor([0, 2, 3, 4, 5, 7])
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1124/13
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1127/11
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1147/5
+Num mris: 5
+Num segs: 5
+training values: tensor([0, 1, 2, 3, 4, 6])
+training values: tensor([0, 2, 4])
+training values: tensor([0, 1, 2, 3, 4, 5])
+training values: tensor([0, 2, 3, 4])
+training values: tensor([0, 2, 4])
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1190/15
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1131/9
+Num mris: 6
+Num segs: 6
+training values: tensor([0, 1])
+training values: tensor([0, 2, 5, 6])
+training values: tensor([0, 2, 3, 4, 7])
+training values: tensor([0, 2, 4, 5])
+training values: tensor([0, 2, 4, 5])
+training values: tensor([0, 2, 4, 5, 6])
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1129/5
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1144/6
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1141/12
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1204/10
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1133/11
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1159/12
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1107/7
+skipping /data/ur/bukowy/LaViolette_Data/Prostates/1128/6
