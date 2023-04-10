@@ -43,7 +43,8 @@ def extract_normal(slide_dir):
 
     seg_file_name = 'mri_seg_mask.tiff'
     # mri_file_name = 'mri_slice_double_T2.nii'
-    mri_file_name = 'mri_slice_double_DWI_clin_reg.nii'
+    # mri_file_name = 'mri_slice_double_DWI_clin_reg.nii'
+    mri_file_name = 'mri_slice_double_ADC1000-2000_T2reg.nii'
 
     seg = load_histology(os.path.join(slide_dir, seg_file_name))
     # seg = np.clip(seg.astype(int) - 1, 0, None)

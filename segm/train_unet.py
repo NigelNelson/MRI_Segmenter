@@ -120,7 +120,7 @@ def main(
     log_dir.mkdir(parents=True, exist_ok=True)
     checkpoint_path = log_dir / "checkpoint.pth"
 
-    train_augs = transforms.Compose([RandomCrop(350), RandomFlip(), ToGray()])
+    train_augs = transforms.Compose([RandomCrop(350), RandomFlip(), ElasticTransform(alpha=2), ToGray()])
     val_augs = ToGray()
 
     training_data_config = "/home/nelsonni/laviolette/method_analysis/configs/seg_train_config.json"

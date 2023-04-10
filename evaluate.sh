@@ -30,7 +30,6 @@
 # Create logging directory
 now=$(date +"%m-%d-%y|%H:%M:%S")
 logdir="./segm/outputs/${now}" 
-mkdir -p $logdir
 
 # Path to container
 #container="/data/containers/msoe-tensorflow-20.07-tf2-py3.sif"

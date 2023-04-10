@@ -26,7 +26,7 @@
 # Prevent out file from being generated
 #SBATCH --output=./segm/outputs/slurm-%j.out
 
-#SBATCH --nodelist=dh-dgx1-3
+#SBATCH --nodelist=dh-dgx1-1
 
 
 # Create logging directory

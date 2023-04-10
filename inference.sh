@@ -30,14 +30,12 @@
 # Create logging directory
 now=$(date +"%m-%d-%y|%H:%M:%S")
 logdir="./segm/outputs/${now}" 
-mkdir -p $logdir
-
 # Path to container
 #container="/data/containers/msoe-tensorflow-20.07-tf2-py3.sif"
 container="/data/containers/msoe-pytorch-20.07-py3.sif"
 
 # Command to run inside container
-command="python -m segm.inference --model-path unet_200/checkpoint.pth -i /home/nelsonni/laviolette/segmenter/ade20k/ade20k/release_test/testing/ -o segm/inference_segs/unet_Rosie_Paper/"
+command="python -m segm.inference --model-path seg_tiny_mask_retrain/checkpoint.pth -i /home/nelsonni/laviolette/segmenter/ade20k/ade20k/release_test/testing/ -o segm/inference_segs/vit_elastic/"
 
 
 # Execute singularity container on node.

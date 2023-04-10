@@ -138,7 +138,8 @@ def evaluate(
     model.eval()
     num = 0
     for batch in logger.log_every(data_loader, print_freq, header):
-        ims = [im.to(ptu.device) for im in batch['mri']]
+        # ims = [im.to(ptu.device) for im in batch['mri']]
+        ims = batch['mri'].to(ptu.device) # Get MRI
         #ims_metas = batch["im_metas"]
         #ori_shape = ims_metas[0]["ori_shape"] #TODO fix brutal hardcoding
         ori_shape = (512, 512)

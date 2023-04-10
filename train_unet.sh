@@ -26,6 +26,8 @@
 # Prevent out file from being generated
 #SBATCH --output=./segm/outputs/slurm-%j.out
 
+#SBATCH --nodelist=dh-dgx1-1
+
 
 # Create logging directory
 now=$(date +"%m-%d-%y|%H:%M:%S") 
@@ -35,7 +37,7 @@ now=$(date +"%m-%d-%y|%H:%M:%S")
 container="/data/containers/msoe-pytorch-20.07-py3.sif"
 
 # Command to run inside container
-command="python -m segm.train_unet --log-dir unet_200 --dataset ade20k --no-resume --backbone vit_tiny_patch16_384 --decoder mask_transformer --batch-size 16 --epochs 400 -lr 0.001"
+command="python -m segm.train_unet --log-dir unet_200 --dataset ade20k --no-resume --backbone vit_tiny_patch16_384 --decoder mask_transformer --batch-size 16 --epochs 500 -lr 0.001"
 
 # Define dataset location
 location="~/laviolette/segmenter/ade20k"

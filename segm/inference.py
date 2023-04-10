@@ -43,10 +43,10 @@ def main(model_path, input_dir, output_dir, gpu):
 
     # model_dir = Path(model_path).parent
     model_dir = Path(model_path)
-    model = UNet(n_channels=1, n_classes=8, bilinear=True)
-    data = torch.load(model_dir, map_location=ptu.device)
-    model.load_state_dict(data)
-    # model, variant = load_model(model_dir)
+    # model = UNet(n_channels=1, n_classes=8, bilinear=True)
+    # data = torch.load(model_dir, map_location=ptu.device)
+    # model.load_state_dict(data)
+    model, variant = load_model(model_dir)
     model.to(ptu.device)
 
     # normalization_name = variant["dataset_kwargs"]["normalization"]
@@ -115,13 +115,13 @@ def main(model_path, input_dir, output_dir, gpu):
 
         unmasked_mri = data_dict["unmasked_mri"]
 
-        im = torch.from_numpy(unmasked_mri).unsqueeze(0)
+        # im = torch.from_numpy(unmasked_mri).unsqueeze(0)
         
-        # unmasked_mri = cv2.cvtColor(unmasked_mri, cv2.COLOR_GRAY2RGB)
+        unmasked_mri = cv2.cvtColor(unmasked_mri, cv2.COLOR_GRAY2RGB)
 
-        # im = torch.from_numpy(unmasked_mri)
-        # im = F.normalize(im, 0.5, 0.5)
-        # im = im.permute(2, 0, 1)
+        im = torch.from_numpy(unmasked_mri)
+        im = F.normalize(im, 0.5, 0.5)
+        im = im.permute(2, 0, 1)
         
         # norm_image = cv2.normalize(unmasked_mri, None, alpha = 0, beta = 255, norm_type = cv2.NORM_MINMAX, dtype = cv2.CV_32F)
 

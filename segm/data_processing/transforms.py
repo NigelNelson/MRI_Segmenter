@@ -107,16 +107,18 @@ class ElasticTransform(object):
         mri = mri.unsqueeze(0).permute(1, 2, 0).numpy()
         seg = seg.unsqueeze(0).permute(1, 2, 0).numpy()
 
-        im_merge = np.concatenate((mri, seg), axis=2)
+        # im_merge = np.concatenate((mri, seg), axis=2)
 
-        im_merge_t = self.elastic_transform(im_merge, alpha, sigma, alpha_affine)
-        mri_t = torch.from_numpy(im_merge_t[...,0])
-        seg_t = torch.from_numpy(im_merge_t[...,1])
+        # im_merge_t = self.elastic_transform(mri, seg, alpha, sigma, alpha_affine)
+        # mri_t = torch.from_numpy(im_merge_t[...,0])
+        # seg_t = torch.from_numpy(im_merge_t[...,1])
+
+        mri_t, seg_t = self.elastic_transform(mri, seg, alpha, sigma, alpha_affine)
 
 
         return {'mri': mri_t, 'seg': seg_t, 'patient': sample['patient']}
 
-    def elastic_transform(self, image, alpha, sigma, alpha_affine, random_state=None):
+    def elastic_transform(self, image, seg, alpha, sigma, alpha_affine, random_state=None):
         """Elastic deformation of images as described in [Simard2003]_ (with modifications).
         .. [Simard2003] Simard, Steinkraus and Platt, "Best Practices for
             Convolutional Neural Networks applied to Visual Document Analysis", in
@@ -137,17 +139,36 @@ class ElasticTransform(object):
         pts1 = np.float32([center_square + square_size, [center_square[0]+square_size, center_square[1]-square_size], center_square - square_size])
         pts2 = pts1 + random_state.uniform(-alpha_affine, alpha_affine, size=pts1.shape).astype(np.float32)
         M = cv2.getAffineTransform(pts1, pts2)
-        image = cv2.warpAffine(image, M, shape_size[::-1], borderMode=cv2.BORDER_REFLECT_101)
+        image = cv2.warpAffine(image, M, shape_size[::-1], borderMode=cv2.BORDER_REFLECT)
+        seg = cv2.warpAffine(seg, M, shape_size[::-1], flags=cv2.INTER_NEAREST, borderMode=cv2.BORDER_REFLECT)
+        # dx = gaussian_filter((random_state.rand(*shape) * 2 - 1), sigma) * alpha
+        # dy = gaussian_filter((random_state.rand(*shape) * 2 - 1), sigma) * alpha
+        # dz = np.zeros_like(dx)
 
-        dx = gaussian_filter((random_state.rand(*shape) * 2 - 1), sigma) * alpha
-        dy = gaussian_filter((random_state.rand(*shape) * 2 - 1), sigma) * alpha
-        dz = np.zeros_like(dx)
+        # blur_size = int(4 * sigma) | 1
+        # dx = cv2.GaussianBlur(image, ksize=(blur_size, blur_size), sigmaX=sigma) * alpha
+        # dy = cv2.GaussianBlur(image, ksize=(blur_size, blur_size), sigmaX=sigma) * alpha
+        # dz = np.zeros_like(dx)
 
-        x, y, z = np.meshgrid(np.arange(shape[1]), np.arange(shape[0]), np.arange(shape[2]))
-        indices = np.reshape(y+dy, (-1, 1)), np.reshape(x+dx, (-1, 1)), np.reshape(z, (-1, 1))
+        blur_size = int(4 * sigma) | 1
+        rand_x = cv2.GaussianBlur(
+            (random_state.rand(*shape) * 2 - 1).astype(np.float32),
+            ksize=(blur_size, blur_size), sigmaX=sigma) * alpha
+        rand_y = cv2.GaussianBlur(
+            (random_state.rand(*shape) * 2 - 1).astype(np.float32),
+            ksize=(blur_size, blur_size), sigmaX=sigma) * alpha
 
-        return map_coordinates(image, indices, order=1, mode='reflect').reshape(shape)
+        grid_x, grid_y = np.meshgrid(np.arange(shape[1]), np.arange(shape[0]))
+        grid_x = (grid_x + rand_x).astype(np.float32)
+        grid_y = (grid_y + rand_y).astype(np.float32)
 
+        # x, y, z = np.meshgrid(np.arange(shape[1]), np.arange(shape[0]), np.arange(shape[2]))
+        # indices = np.reshape(y+dy, (-1, 1)), np.reshape(x+dx, (-1, 1)), np.reshape(z, (-1, 1))
+
+        # return map_coordinates(image, indices, order=1, mode='reflect').reshape(shape)
+        img = cv2.remap(image, map1=grid_x, map2=grid_y, borderMode=cv2.BORDER_REFLECT, interpolation=cv2.INTER_NEAREST)
+        seg = cv2.remap(seg, map1=grid_x, map2=grid_y, borderMode=cv2.BORDER_REFLECT, interpolation=cv2.INTER_NEAREST)
+        return img, seg
 
 
 class ToColor(object):
@@ -164,7 +185,11 @@ class ToColor(object):
     def __call__(self, sample):
         mri = sample['mri']
         mri = (mri + 1) / 2
-        mri = torch.from_numpy(cv2.cvtColor(mri.numpy(), cv2.COLOR_GRAY2RGB))
+        if isinstance(mri, np.ndarray):
+            mri = torch.from_numpy(cv2.cvtColor(mri, cv2.COLOR_GRAY2RGB))
+        else:
+            mri = torch.from_numpy(cv2.cvtColor(mri.numpy(), cv2.COLOR_GRAY2RGB))
+        # mri = torch.from_numpy(cv2.cvtColor(mri.numpy(), cv2.COLOR_GRAY2RGB))
         mri = mri.permute(2, 0, 1)
         return {'mri': mri, 'seg': sample['seg'], 'patient': sample['patient']}
 
@@ -182,5 +207,7 @@ class ToGray(object):
 
     def __call__(self, sample):
         mri = sample['mri']
+        if isinstance(mri, np.ndarray):
+            mri = torch.from_numpy(mri)
         mri = mri.unsqueeze(0)
         return {'mri': mri, 'seg': sample['seg'], 'patient': sample['patient']}

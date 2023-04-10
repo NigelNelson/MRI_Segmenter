@@ -35,8 +35,6 @@ from sklearn.utils.class_weight import compute_class_weight
 
 import wandb
 
-global_learning_rate = 0.001
-
 wandb.login()
 
 
@@ -83,8 +81,6 @@ def main(
     amp,
     resume,
 ):
-
-    learning_rate = global_learning_rate
     # start distributed mode
     ptu.set_gpu_mode(True)
     distributed.init_process()
@@ -183,7 +179,7 @@ def main(
     # dataset
     dataset_kwargs = variant["dataset_kwargs"]
 
-    train_augs = transforms.Compose([RandomCrop(400), RandomFlip(), ToColor()])
+    train_augs = transforms.Compose([RandomCrop(400), RandomFlip(), ElasticTransform(alpha=2), ToColor()])
     val_augs = ToColor()
 
     training_data_config = "/home/nelsonni/laviolette/method_analysis/configs/seg_train_config.json"
@@ -301,7 +297,7 @@ def main(
         class_weights.append(sum(counts[1]) / (n_cls * count))
     class_weights = torch.tensor(class_weights)
         
-    with wandb.init(project='segmenter_training', config=wandb_config):
+    with wandb.init(project='ADC_1000_2000_segmenter_training', config=wandb_config):
         
         wandb.watch(model, log='all', log_freq=10)
 
@@ -374,5 +370,4 @@ def main(
 
 
 if __name__ == "__main__":
-    global_learning_rate = 0.1
     main()
