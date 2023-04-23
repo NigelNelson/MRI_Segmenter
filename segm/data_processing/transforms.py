@@ -26,15 +26,22 @@ class RandomCrop(object):
     def __call__(self, sample):
         mri, seg = sample['mri'], sample['seg']
 
-        h, w = mri.shape
+        h, w = mri.shape[-2:]
         new_h, new_w = self.output_size
-
+        
+        top = np.random.randint(0, h - new_h)
+        left = np.random.randint(0, w - new_w)
         if h > new_h and w > new_w:
-            top = np.random.randint(0, h - new_h)
-            left = np.random.randint(0, w - new_w)
-
-            mri = mri[top: top + new_h,
-                        left: left + new_w]
+            if len(mri.shape) > 2:
+                mris = []
+                for mri_img in mri:
+                    mri_img = mri_img[top: top + new_h,
+                            left: left + new_w]
+                    mris.append(mri_img)
+                mri = torch.stack(mris, dim=0)
+            else:
+                mri = mri[top: top + new_h,
+                            left: left + new_w]
 
             seg = seg[top: top + new_h,
                         left: left + new_w]
@@ -104,7 +111,6 @@ class ElasticTransform(object):
         sigma = mri.shape[1] * self.sigma
         alpha_affine = mri.shape[1] * self.alpha_affine
         
-        mri = mri.unsqueeze(0).permute(1, 2, 0).numpy()
         seg = seg.unsqueeze(0).permute(1, 2, 0).numpy()
 
         # im_merge = np.concatenate((mri, seg), axis=2)
@@ -129,6 +135,14 @@ class ElasticTransform(object):
         """
         if random_state is None:
             random_state = np.random.RandomState(None)
+        is_multiple_mris = False
+        if len(image.shape) > 2:
+            is_multiple_mris = True
+            all_mris = image
+            image = all_mris[0]
+            image = image.unsqueeze(0).permute(1, 2, 0).numpy()
+        else:
+            image = image.unsqueeze(0).permute(1, 2, 0).numpy()
 
         shape = image.shape
         shape_size = shape[:2]
@@ -166,7 +180,16 @@ class ElasticTransform(object):
         # indices = np.reshape(y+dy, (-1, 1)), np.reshape(x+dx, (-1, 1)), np.reshape(z, (-1, 1))
 
         # return map_coordinates(image, indices, order=1, mode='reflect').reshape(shape)
-        img = cv2.remap(image, map1=grid_x, map2=grid_y, borderMode=cv2.BORDER_REFLECT, interpolation=cv2.INTER_NEAREST)
+        if is_multiple_mris:
+            mris = []
+            for mri in all_mris:
+                mri = mri.unsqueeze(0).permute(1, 2, 0).numpy()
+                mri = cv2.remap(mri, map1=grid_x, map2=grid_y, borderMode=cv2.BORDER_REFLECT, interpolation=cv2.INTER_NEAREST)
+                mri = torch.from_numpy(mri)
+                mris.append(mri)
+            img = torch.stack(mris, dim=0)
+        else:
+            img = cv2.remap(image, map1=grid_x, map2=grid_y, borderMode=cv2.BORDER_REFLECT, interpolation=cv2.INTER_NEAREST)
         seg = cv2.remap(seg, map1=grid_x, map2=grid_y, borderMode=cv2.BORDER_REFLECT, interpolation=cv2.INTER_NEAREST)
         return img, seg
 
@@ -184,7 +207,7 @@ class ToColor(object):
 
     def __call__(self, sample):
         mri = sample['mri']
-        mri = (mri + 1) / 2
+        # mri = (mri + 1) / 2
         if isinstance(mri, np.ndarray):
             mri = torch.from_numpy(cv2.cvtColor(mri, cv2.COLOR_GRAY2RGB))
         else:

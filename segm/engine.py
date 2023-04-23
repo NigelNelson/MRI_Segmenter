@@ -8,6 +8,7 @@ from segm.data.utils import IGNORE_LABEL
 import segm.utils.torch as ptu
 from PIL import Image
 import numpy as np
+import wandb
 
 def train_one_epoch(
     model,
@@ -126,6 +127,7 @@ def evaluate(
     window_size,
     window_stride,
     amp_autocast,
+    epoch
 ):
     model_without_ddp = model
     if hasattr(model, "module"):
@@ -137,6 +139,7 @@ def evaluate(
     val_seg_pred = {}
     model.eval()
     num = 0
+    wandb_images = {}
     for batch in logger.log_every(data_loader, print_freq, header):
         # ims = [im.to(ptu.device) for im in batch['mri']]
         ims = batch['mri'].to(ptu.device) # Get MRI
@@ -164,6 +167,19 @@ def evaluate(
         seg_pred = seg_pred.cpu().numpy()
         val_seg_pred[filename[0]] = seg_pred
 
+        if epoch % 50 == 0 or epoch == 349 or epoch == 0:
+            if ims.shape[1] > 3:
+                new_im = wandb.Image(ims.cpu()[0][0].numpy()*255, masks={
+                                "prediction" : {"mask_data" : seg_pred},
+                                "ground truth" : {"mask_data" :  val_seg_gt[filename[0]].numpy()}},
+                                caption=filename[0])
+            else:
+                new_im = wandb.Image(ims.cpu().squeeze(0).permute(1, 2, 0).numpy(), masks={
+                                    "prediction" : {"mask_data" : seg_pred},
+                                    "ground truth" : {"mask_data" :  val_seg_gt[filename[0]].numpy()}},
+                                    caption=filename[0])
+            wandb_images[filename[0]] = new_im
+
 
         # pil_im = Image.fromarray(np.uint8(seg_pred), 'L')
         # name = str(num) + '.jpg'
@@ -177,7 +193,7 @@ def evaluate(
     scores = compute_metrics(
         val_seg_pred,
         val_seg_gt,
-        8, #TODO remove brutal hard coded values
+        9, #TODO remove brutal hard coded values
         #ignore_index=IGNORE_LABEL,
         distributed=ptu.distributed,
     )
@@ -185,7 +201,8 @@ def evaluate(
     for k, v in scores.items():
         logger.update(**{f"{k}": v, "n": 1})
 
-    return logger
+    log_images = [image_tup[1] for image_tup in sorted(wandb_images.items())]
+    return logger, log_images
 
 
 @torch.no_grad()
@@ -205,6 +222,7 @@ def unet_evaluate(
         print(f'GT values: {torch.unique(seg_gt_tmp)}')
 
     val_seg_pred = {}
+    wandb_images = []
     model.eval()
     num = 0
     for batch in data_loader: #logger.log_every(data_loader, print_freq, header):
@@ -230,6 +248,11 @@ def unet_evaluate(
         seg_pred = seg_pred.cpu().numpy()
         val_seg_pred[filename[0]] = seg_pred
 
+        new_im = wandb.Image(im.cpu().numpy(), masks={
+                            "prediction" : {"mask_data" : seg_pred},
+                            "ground truth" : {"mask_data" :  val_seg_gt[filename[0]]}})
+        wandb_images.append(new_im)
+
 
         # pil_im = Image.fromarray(np.uint8(seg_pred), 'L')
         # name = str(num) + '.jpg'
@@ -242,7 +265,7 @@ def unet_evaluate(
     scores = compute_metrics(
         val_seg_pred,
         val_seg_gt,
-        8, #TODO remove brutal hard coded values
+        9, #TODO remove brutal hard coded values
         #ignore_index=IGNORE_LABEL,
         distributed=ptu.distributed,
     )
@@ -250,4 +273,4 @@ def unet_evaluate(
     for k, v in scores.items():
         logger.update(**{f"{k}": v, "n": 1})
 
-    return logger
+    return logger, wandb_images 

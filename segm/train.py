@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 sys.path.append(str(Path.cwd().parent))
 from segm.data_processing.seg_data_loader import SegDataLoader
-from segm.data_processing.transforms import RandomCrop, RandomFlip, ElasticTransform, ToColor
+from segm.data_processing.transforms import RandomCrop, RandomFlip, ElasticTransform, ToColor, ToGray
 import yaml
 import json
 import numpy as np
@@ -179,8 +179,11 @@ def main(
     # dataset
     dataset_kwargs = variant["dataset_kwargs"]
 
-    train_augs = transforms.Compose([RandomCrop(400), RandomFlip(), ElasticTransform(alpha=2), ToColor()])
-    val_augs = ToColor()
+    # train_augs = transforms.Compose([RandomCrop(400), RandomFlip(), ElasticTransform(alpha=2), ToColor()])
+    # val_augs = ToColor()
+
+    train_augs = transforms.Compose([RandomCrop(400), RandomFlip(), ElasticTransform(alpha=2)])
+    val_augs = None
 
     training_data_config = "/home/nelsonni/laviolette/method_analysis/configs/seg_train_config.json"
     validation_data_config = "/home/nelsonni/laviolette/method_analysis/configs/seg_val_config.json"
@@ -200,7 +203,7 @@ def main(
     val_kwargs["crop"] = False
     #val_loader = create_dataset(val_kwargs)
     # n_cls = train_loader.unwrapped.n_cls
-    n_cls = 8 #TODO fix sloppy code
+    n_cls = 9 #TODO fix sloppy code
 
     # model
     net_kwargs = variant["net_kwargs"]
@@ -297,7 +300,7 @@ def main(
         class_weights.append(sum(counts[1]) / (n_cls * count))
     class_weights = torch.tensor(class_weights)
         
-    with wandb.init(project='ADC_1000_2000_segmenter_training', config=wandb_config):
+    with wandb.init(project='MRI_zscore_sequence_experiments', config=wandb_config):
         
         wandb.watch(model, log='all', log_freq=10)
 
@@ -330,13 +333,14 @@ def main(
             # evaluate
             eval_epoch = epoch % eval_freq == 0 or epoch == num_epochs - 1
             if eval_epoch:
-                eval_logger = evaluate(
+                eval_logger, wandb_images = evaluate(
                     model,
                     val_loader,
                     val_seg_gt,
                     window_size,
                     window_stride,
                     amp_autocast,
+                    epoch
                 )
                 print(f"Stats [{epoch}]:", eval_logger, flush=True)
                 print("")
@@ -356,10 +360,21 @@ def main(
                     **{f"train_{k}": v for k, v in train_stats.items()},
                     **{f"val_{k}": v for k, v in val_stats.items()},
                     "epoch": epoch,
+                    "num_updates": (epoch + 1) * len(train_loader)
+                }
+
+                wandb_stats = {
+                    **{f"train_{k}": v for k, v in train_stats.items()},
+                    **{f"val_{k}": v for k, v in val_stats.items()},
+                    "epoch": epoch,
                     "num_updates": (epoch + 1) * len(train_loader),
+                    "predictions": wandb_images
                 }
                 
-                wandb.log(log_stats, step=log_stats['epoch'])
+                if epoch % 50 == 0 or epoch == num_epochs-1 or epoch == 0:
+                    wandb.log(wandb_stats, step=wandb_stats['epoch'])
+                else:
+                    wandb.log(log_stats, step=log_stats['epoch'])
 
                 with open(log_dir / "log.txt", "a") as f:
                     f.write(json.dumps(log_stats) + "\n")

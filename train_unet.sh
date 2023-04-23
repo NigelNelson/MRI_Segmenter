@@ -10,7 +10,7 @@
 
 # You _must_ specify the partition. Rosie's default is the 'teaching'
 # partition for interactive nodes.  Another option is the 'batch' partition.
-#SBATCH --partition=dgx
+#SBATCH --partition=teaching
 #SBATCH --account=undergrad_research
 #SBATCH --mail-type=ALL
 
@@ -26,7 +26,7 @@
 # Prevent out file from being generated
 #SBATCH --output=./segm/outputs/slurm-%j.out
 
-#SBATCH --nodelist=dh-dgx1-1
+# SBATCH --nodelist=dh-node3
 
 
 # Create logging directory
@@ -37,7 +37,7 @@ now=$(date +"%m-%d-%y|%H:%M:%S")
 container="/data/containers/msoe-pytorch-20.07-py3.sif"
 
 # Command to run inside container
-command="python -m segm.train_unet --log-dir unet_200 --dataset ade20k --no-resume --backbone vit_tiny_patch16_384 --decoder mask_transformer --batch-size 16 --epochs 500 -lr 0.001"
+command="python -m segm.train_unet --log-dir unet_200 --dataset ade20k --no-resume --backbone vit_tiny_patch16_384 --decoder mask_transformer --batch-size 8 --epochs 350  --weight-decay 0.001  -lr 0.001"
 
 # Define dataset location
 location="~/laviolette/segmenter/ade20k"

@@ -120,8 +120,22 @@ def main(
     log_dir.mkdir(parents=True, exist_ok=True)
     checkpoint_path = log_dir / "checkpoint.pth"
 
-    train_augs = transforms.Compose([RandomCrop(350), RandomFlip(), ElasticTransform(alpha=2), ToGray()])
-    val_augs = ToGray()
+    # train_augs = transforms.Compose([RandomCrop(400), RandomFlip(), ElasticTransform(alpha=2), ToGray()])
+    # val_augs = ToGray()
+
+    # training_data_config = "/home/nelsonni/laviolette/method_analysis/configs/seg_train_config.json"
+    # validation_data_config = "/home/nelsonni/laviolette/method_analysis/configs/seg_val_config.json"
+
+    # train_loader = SegDataLoader(training_data_config, transform=train_augs)
+    # val_loader = SegDataLoader(validation_data_config, transform=val_augs)
+
+    # train_loader = DataLoader(train_loader, batch_size=batch_size,
+    #                     shuffle=False, sampler=DistributedSampler(train_loader))
+    # val_loader = DataLoader(val_loader, batch_size=1,
+    #                     shuffle=False, sampler=DistributedSampler(val_loader))
+
+    train_augs = transforms.Compose([RandomCrop(400), RandomFlip(), ElasticTransform(alpha=2)])
+    val_augs = None
 
     training_data_config = "/home/nelsonni/laviolette/method_analysis/configs/seg_train_config.json"
     validation_data_config = "/home/nelsonni/laviolette/method_analysis/configs/seg_val_config.json"
@@ -135,13 +149,13 @@ def main(
                         shuffle=False, sampler=DistributedSampler(val_loader))
 
 
-    n_cls = 8 #TODO fix sloppy code
+    n_cls = 9 #TODO fix sloppy code
 
 
     # model = torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet',
     #     in_channels=3, out_channels=8, init_features=32, pretrained=False)
 
-    model =  UNet(n_channels=1, n_classes=8, bilinear=True)
+    model =  UNet(n_channels=6, n_classes=9, bilinear=True)
     model = model.to(ptu.device)
 
     # optimizer
@@ -168,7 +182,7 @@ def main(
 
     # optimizer = create_optimizer(opt_args, model)
     # optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    optimizer = torch.optim.SGD(model.parameters(), lr=lr, weight_decay=0.0001)
+    optimizer = torch.optim.SGD(model.parameters(), lr=lr, weight_decay=weight_decay)
     lr_scheduler = create_scheduler(opt_args, optimizer)
     
     num_iterations = 0
@@ -226,7 +240,7 @@ def main(
 
     best_iou = 0
         
-    with wandb.init(project='segmenter_training', config=wandb_config):
+    with wandb.init(project='MRI_zscore_sequence_experiments', config=wandb_config):
         
         wandb.watch(model, log='all', log_freq=10)
 
@@ -274,6 +288,7 @@ def main(
             model.eval()
             val_seg_pred = {}
             eval_logger = MetricLogger(delimiter="  ")
+            wandb_images = {}
             
             for patient, seg_gt_tmp in val_seg_gt.items():
                 print(f'GT values: {torch.unique(seg_gt_tmp)}')
@@ -287,9 +302,9 @@ def main(
                         model_without_ddp,
                         im,
                         im,
-                        im_size,
+                        ori_shape,
                         512,
-                        1,
+                        512,
                         batch_size=1,
                     )
         #             seg_pred = model.forward(im)
@@ -297,13 +312,26 @@ def main(
                 print(f'pred values: {torch.unique(seg_pred)}')
                 seg_pred = seg_pred.cpu().numpy()
                 val_seg_pred[filename[0]] = seg_pred
+
+                if epoch % 50 == 0 or epoch == num_epochs-1 or epoch == 0:
+                    if im.shape[1] > 3:
+                        new_im = wandb.Image(im.cpu()[0][0].numpy()*255, masks={
+                                        "prediction" : {"mask_data" : seg_pred},
+                                        "ground truth" : {"mask_data" :  val_seg_gt[filename[0]].numpy()}},
+                                        caption=filename[0])
+                    else:
+                        new_im = wandb.Image(im.cpu().squeeze(0).permute(1, 2, 0).numpy(), masks={
+                                            "prediction" : {"mask_data" : seg_pred},
+                                            "ground truth" : {"mask_data" :  val_seg_gt[filename[0]].numpy()}},
+                                            caption=filename[0])
+                    wandb_images[filename[0]] = new_im
                 
     
             val_seg_pred = gather_data(val_seg_pred, tmp_dir='.')
             scores = compute_metrics(
                 val_seg_pred,
                 val_seg_gt,
-                8, #TODO remove brutal hard coded values
+                9, #TODO remove brutal hard coded values
                 #ignore_index=IGNORE_LABEL,
                 distributed=ptu.distributed,
             )
@@ -336,7 +364,18 @@ def main(
                     "num_updates": (epoch + 1) * len(train_loader),
                 }
 
-                wandb.log(log_stats, step=log_stats['epoch'])
+                log_images = [image_tup[1] for image_tup in sorted(wandb_images.items())]
+                wandb_stats = {
+                    **{f"train_{k}": v for k, v in train_stats.items()},
+                    **{f"val_{k}": v for k, v in val_stats.items()},
+                    "epoch": epoch,
+                    "num_updates": (epoch + 1) * len(train_loader),
+                    "predictions": log_images
+                }
+                if epoch % 50 == 0 or epoch == num_epochs-1 or epoch == 0:
+                    wandb.log(wandb_stats, step=wandb_stats['epoch'])
+                else:
+                    wandb.log(log_stats, step=log_stats['epoch'])
 
                 with open(log_dir / "log.txt", "a") as f:
                     f.write(json.dumps(log_stats) + "\n")

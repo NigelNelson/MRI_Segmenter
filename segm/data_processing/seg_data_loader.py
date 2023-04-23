@@ -42,21 +42,46 @@ def extract_normal(slide_dir):
     # Remeber that these generated files are augmented, so they don't line up with the mat files
 
     seg_file_name = 'mri_seg_mask.tiff'
-    # mri_file_name = 'mri_slice_double_T2.nii'
+    t2_name = 'mri_slice_double_T2.nii'
     # mri_file_name = 'mri_slice_double_DWI_clin_reg.nii'
-    mri_file_name = 'mri_slice_double_ADC1000-2000_T2reg.nii'
+    adc_name = 'mri_slice_double_ADC_machine_reg.nii'
+    mri_1 = 'mri_slice_double_DWI_b10_reg.nii'
+    mri_2 = 'mri_slice_double_DWI_b100_reg.nii'
+    mri_3 = 'mri_slice_double_DWI_b1000_reg.nii'
+    mri_4 = 'mri_slice_double_DWI_b1400_reg.nii'
+    mri_names = [adc_name, t2_name, mri_1, mri_2, mri_3, mri_4]
+
+    mris = []
+
+    for mri_name in mri_names:
+        mri = load_mri(os.path.join(slide_dir, (mri_name)))
+        # mri = cv2.cvtColor(mri, cv2.COLOR_GRAY2RGB)
+        mri = (mri - mri.mean()) / mri.std()
+        mri = torch.from_numpy(mri)
+        # mri = mri.unsqueeze(0) # comment out
+        # mri = F.normalize(mri, 0.5, 0.5)
+        # mri = mri.squeeze(0)
+        # mri += 1
+        # mri /= 2
+        mris.append(mri)
+    # mri = load_mri(os.path.join(slide_dir, (t2_name)))
+    # # mri = cv2.cvtColor(mri, cv2.COLOR_GRAY2RGB)
+    # mri = (mri - mri.mean()) / mri.std()
+    # mri = torch.from_numpy(mri)
 
     seg = load_histology(os.path.join(slide_dir, seg_file_name))
     # seg = np.clip(seg.astype(int) - 1, 0, None)
     seg = torch.from_numpy(seg)
 
-    mri = load_mri(os.path.join(slide_dir, (mri_file_name)))
-    # mri = cv2.cvtColor(mri, cv2.COLOR_GRAY2RGB)
-    mri = torch.from_numpy(mri)
-    mri = mri.unsqueeze(0) # comment out
-    mri = F.normalize(mri, 0.5, 0.5)
-    mri = mri.squeeze(0)
-    # mri = mri.permute(2, 0, 1)
+    # mri = load_mri(os.path.join(slide_dir, (mri_file_name)))
+    # # mri = cv2.cvtColor(mri, cv2.COLOR_GRAY2RGB)
+    # mri = torch.from_numpy(mri)
+    # mri = mri.unsqueeze(0) # comment out
+    # mri = F.normalize(mri, 0.5, 0.5)
+    # mri = mri.squeeze(0)
+    # # mri = mri.permute(2, 0, 1)
+
+    mri = torch.stack(mris, dim=0)
 
     return (mri, seg, slide_dir.split('Prostates/')[1])
 
@@ -81,7 +106,8 @@ class SegDataLoader(Dataset):
                 print('Warning: patient {0} not found...ignoring'.format(include_patient))
             else:
                 self.slide_dirs += get_child_dirs(os.path.join(self.parent_dir, include_patient), full_path=True)
-        # self.slide_dirs = [i for i in self.slide_dirs if i not in self.incomplete_patients]
+        print(f'Removing the following slides: {self.incomplete_patients}')
+        self.slide_dirs = [i for i in self.slide_dirs if i not in self.incomplete_patients]
         self.slide_dirs = self.get_complete_dirs(self.slide_dirs)
         self.indices = np.arange(len(self.slide_dirs))
         self.slide_dirs = np.array(self.slide_dirs)

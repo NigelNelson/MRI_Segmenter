@@ -1,12 +1,18 @@
 import sys
 import os
 from pathlib import Path
+sys.path.append(str(Path.cwd().parent))
 sys.path.append(str(Path.cwd().parent.parent) + '/mri_histology_toolkit')
 sys.path.append(str(Path.cwd().parent.parent) + '/homologous_point_prediction')
 
 # from homologous_point_prediction.evaluate import evaluate, evaluate_rotation
 
-from mri_histology_toolkit.data_loader import DataLoader
+# from mri_histology_toolkit.data_loader import DataLoader
+
+from segm.data_processing.seg_data_loader import SegDataLoader
+from segm.data_processing.transforms import ToColor
+
+from torch.utils.data.distributed import DistributedSampler
 
 import matplotlib.pyplot as plt
 
@@ -52,25 +58,25 @@ def main(model_path, input_dir, output_dir, gpu):
     # normalization_name = variant["dataset_kwargs"]["normalization"]
     # normalization = STATS[normalization_name]
     # cat_names, cat_colors = dataset_cat_description(ADE20K_CATS_PATH)
-    cat_names = ['background',
-                '1',
-                '2',
-                '3',
-                '4',
-                '5',
-                '6',
-                '7'
-                ]
-    cat_colors = {
-        0: torch.tensor([0.0, 0.0, 0.0]).float(), 
-        1: torch.tensor([255.0, 51.0, 51.0]).float() / 255.0, # red
-        2: torch.tensor([255.0, 128.0, 0.0]).float() / 255.0, # orange
-        3: torch.tensor([255.0, 255.0, 0.0]).float() / 255.0, # yellow
-        4: torch.tensor([0.0, 255.0, 0.0]).float() / 255.0, # green
-        5: torch.tensor([0.0, 255.0, 255.0]).float() / 255.0, # cyan
-        6: torch.tensor([0.0, 0.0, 255.0]).float() / 255.0, # blue
-        7: torch.tensor([255.0, 0.0, 255.0]).float() / 255.0, # pink
-    }
+    # cat_names = ['background',
+    #             '1',
+    #             '2',
+    #             '3',
+    #             '4',
+    #             '5',
+    #             '6',
+    #             '7'
+    #             ]
+    # cat_colors = {
+    #     0: torch.tensor([0.0, 0.0, 0.0]).float(), 
+    #     1: torch.tensor([255.0, 51.0, 51.0]).float() / 255.0, # red
+    #     2: torch.tensor([255.0, 128.0, 0.0]).float() / 255.0, # orange
+    #     3: torch.tensor([255.0, 255.0, 0.0]).float() / 255.0, # yellow
+    #     4: torch.tensor([0.0, 255.0, 0.0]).float() / 255.0, # green
+    #     5: torch.tensor([0.0, 255.0, 255.0]).float() / 255.0, # cyan
+    #     6: torch.tensor([0.0, 0.0, 255.0]).float() / 255.0, # blue
+    #     7: torch.tensor([255.0, 0.0, 255.0]).float() / 255.0, # pink
+    # }
 
     input_dir = Path(input_dir)
     output_dir = Path(output_dir)
@@ -105,34 +111,45 @@ def main(model_path, input_dir, output_dir, gpu):
 
     #     pil_im.save(save_name)
 
+    test_augs = ToColor()
 
-    data_loader = DataLoader(config_path="/home/nelsonni/laviolette/method_analysis/configs/seg_test_config.json")
-    for data_dict in data_loader:
+    test_data_config = "/home/nelsonni/laviolette/method_analysis/configs/seg_test_config.json"
+
+    test_loader = SegDataLoader(test_data_config, transform=test_augs)
+
+    test_loader = DataLoader(test_loader, batch_size=1,
+                        shuffle=False, sampler=DistributedSampler(test_loader))
+
+
+    # data_loader = DataLoader(config_path="/home/nelsonni/laviolette/method_analysis/configs/seg_test_config.json")
+    for batch in test_loader:
         # if True:
         #     print(data_dict["patient"], data_dict["slide"])
         #     print(len(data_dict["hist_points"]))
         #     print(len(data_dict["mri_points"]))
 
-        unmasked_mri = data_dict["unmasked_mri"]
+        # unmasked_mri = data_dict["unmasked_mri"]
 
-        # im = torch.from_numpy(unmasked_mri).unsqueeze(0)
+        # # im = torch.from_numpy(unmasked_mri).unsqueeze(0)
         
-        unmasked_mri = cv2.cvtColor(unmasked_mri, cv2.COLOR_GRAY2RGB)
+        # unmasked_mri = cv2.cvtColor(unmasked_mri, cv2.COLOR_GRAY2RGB)
 
-        im = torch.from_numpy(unmasked_mri)
-        im = F.normalize(im, 0.5, 0.5)
-        im = im.permute(2, 0, 1)
+        # im = torch.from_numpy(unmasked_mri)
+        # im = F.normalize(im, 0.5, 0.5)
+        # im = im.permute(2, 0, 1)
         
-        # norm_image = cv2.normalize(unmasked_mri, None, alpha = 0, beta = 255, norm_type = cv2.NORM_MINMAX, dtype = cv2.CV_32F)
+        # # norm_image = cv2.normalize(unmasked_mri, None, alpha = 0, beta = 255, norm_type = cv2.NORM_MINMAX, dtype = cv2.CV_32F)
 
-        im = im.to(ptu.device)
+        # im = im.to(ptu.device)
+
+        im = batch['mri'].to(ptu.device) # Get MRI
 
         im_meta = dict(flip=False)
         logits = inference(
             model,
             [im],
             [im_meta],
-            ori_shape=im.shape[1:3],
+            ori_shape=(512, 512),
             window_size=512,
             window_stride=512,
             batch_size=1,

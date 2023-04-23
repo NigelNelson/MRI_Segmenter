@@ -334,7 +334,7 @@ def inference(
     window_stride,
     batch_size,
 ):
-    C = 8 # TODO remove hardcode
+    C = 9 # TODO remove hardcode
     seg_map = torch.zeros((C, ori_shape[0], ori_shape[1]), device=ptu.device)
     for im, im_metas in zip(ims, ims_metas):
         #im = im.unsqueeze(0)
@@ -360,7 +360,7 @@ def unet_inference(
     ims,
     ori_shape,
 ):
-    C = 8
+    C = 9
     seg_map = torch.zeros((C, ori_shape[0], ori_shape[1]), device=ptu.device)
     ims = torch.stack(ims).to(ptu.device)
     seg_map = model.forward(ims)
