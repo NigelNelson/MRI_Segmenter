@@ -87,6 +87,7 @@ def main(
 ):
     
     with wandb.init(config=None):
+        # Collects the parameters to test from wandb
         w_config = wandb.config
         print(w_config)
         bilinear = w_config['bilinear']
@@ -338,7 +339,7 @@ def main(
                     f.write(json.dumps(log_stats) + "\n")
 
 def sweep_it(config=None):
-    # start distributed mode
+    # start distributed mode if it hasn't already been
     try:
         ptu.set_gpu_mode(True)
         distributed.init_process()
@@ -350,5 +351,6 @@ def sweep_it(config=None):
 
 if __name__ == "__main__":
     wandb.login()
+    # Tells the agent what function to execute
     wandb.agent('pf99dr9n', sweep_it, count=300, project='UNet-Test_Sweep')
     sys.exit(1)

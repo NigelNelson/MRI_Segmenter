@@ -59,26 +59,14 @@ def extract_normal(slide_dir, other_mri_name):
 
     for mri_name in mri_names:
         mri = load_mri(os.path.join(slide_dir, (mri_name)))
-        # mri = cv2.cvtColor(mri, cv2.COLOR_GRAY2RGB)
+
         mri = (mri - mri.mean()) / mri.std()
-        # mask
-        # mri[mri_mask == 0] = 0
+
         mri = torch.from_numpy(mri)
-        # mri = mri.unsqueeze(0) # comment out
-        # mri = F.normalize(mri, 0.5, 0.5)
-        # mri = mri.squeeze(0)
-        # mri += 1
-        # mri /= 2
+
         mris.append(mri)
 
-    # mri = load_mri(os.path.join(slide_dir, (t2_name)))
-    # mri_mask = load_mri(os.path.join(slide_dir, (mask_name)))
-    # # mri = cv2.cvtColor(mri, cv2.COLOR_GRAY2RGB)
-    # mri = (mri - mri.mean()) / mri.std()
 
-    # mri[mri_mask == 0] = 0
-    
-    # mri = torch.from_numpy(mri)
 
     seg = load_histology(os.path.join(slide_dir, seg_file_name))
     # seg = np.clip(seg.astype(int) - 1, 0, None)
@@ -91,7 +79,7 @@ def extract_normal(slide_dir, other_mri_name):
     seg[seg == 2] = 8
     seg[seg == 1] = 8
 
-    seg[seg == 10] = 1 #TODO undo me
+    seg[seg == 10] = 2 #TODO undo me
     seg[seg == 8] = 1
 
     if len(np.unique(seg, return_counts=True)[1]) != 2:
@@ -99,13 +87,6 @@ def extract_normal(slide_dir, other_mri_name):
 
     seg = torch.from_numpy(seg)
 
-    # mri = load_mri(os.path.join(slide_dir, (mri_file_name)))
-    # # mri = cv2.cvtColor(mri, cv2.COLOR_GRAY2RGB)
-    # mri = torch.from_numpy(mri)
-    # mri = mri.unsqueeze(0) # comment out
-    # mri = F.normalize(mri, 0.5, 0.5)
-    # mri = mri.squeeze(0)
-    # # mri = mri.permute(2, 0, 1)
 
     mri = torch.stack(mris, dim=0)
 
@@ -119,7 +100,7 @@ def extract_slide(slide_dir, other_mri_name):
 
 class RegTrainDataLoader(Dataset):
 
-    """Lazy loading for memory use min. Loading all images first will improve performance"""
+    """Data Loader used for trainining in the Registration experiment"""
 
     def __init__(self, config_path, transform=None, other_mri_name=''):
         self._parse_config(config_path)

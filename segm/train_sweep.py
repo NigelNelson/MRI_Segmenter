@@ -81,6 +81,7 @@ def main(
 ):
     
     with wandb.init(config=None):
+        # Collects the parameters to test from wandb
         w_config = wandb.config
         print(w_config)
         backbone = w_config['backbone']
@@ -354,7 +355,7 @@ def main(
                     f.write(json.dumps(log_stats) + "\n")
 
 def sweep_it(config=None):
-    # start distributed mode
+    # start distributed mode if it hasn't already been
     try:
         ptu.set_gpu_mode(True)
         distributed.init_process()
@@ -366,5 +367,6 @@ def sweep_it(config=None):
 
 if __name__ == "__main__":
     wandb.login()
+    # Tells the agent what function to execute
     wandb.agent('kab9pxvd', sweep_it, count=300, project='ViT-Test_Sweep')
     sys.exit(1)

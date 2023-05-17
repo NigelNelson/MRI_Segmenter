@@ -92,6 +92,7 @@ def main(
     wandb_run_name
 ):
 
+    # Verify that the correct sequence is being registered
     print(mri_sequence_name)
     # start distributed mode
     ptu.set_gpu_mode(True)
@@ -186,10 +187,13 @@ def main(
 
     iteration_count = 0
 
-    while True:
+    # Registration will run continually until explicitly stopped
 
+    while True:
         # Set the training filename
         other_mri_filename = mri_sequence_name
+
+        # Load in the recently registered MRI if iteration > 0
         if iteration_count == 0:
             other_mri_filename += '.nii'
         else:
@@ -205,6 +209,7 @@ def main(
         dataset_kwargs = variant["dataset_kwargs"]
 
 
+        # Define Data loaderes
         train_augs = transforms.Compose([RandomCrop(400), RandomFlip(), ElasticTransform(alpha=2)])
         val_augs = None
 
@@ -226,7 +231,8 @@ def main(
         val_kwargs["crop"] = False
         #val_loader = create_dataset(val_kwargs)
         # n_cls = train_loader.unwrapped.n_cls
-        n_cls = 2 #TODO fix hard-code number classes
+
+        n_cls = 3 #TODO fix hard-code number classes
 
         # model
         net_kwargs = variant["net_kwargs"]
@@ -308,6 +314,8 @@ def main(
             classes=n_cls
             )
 
+        # Below logic is used to assign custom weights to update the model
+        # inversly to the proportion of the dataset made up of a given class
         pixel_values = torch.tensor([])
         for batch in train_loader:
             if len(batch['seg']) > 1:
@@ -445,7 +453,7 @@ def main(
                         window_size,
                         window_stride,
                         batch_size=1,
-                        n_cls=2
+                        n_cls=n_cls
                     )
                     # Run inference on T2 MRI
                     t2_seg_pred = inference(
@@ -456,39 +464,47 @@ def main(
                         window_size,
                         window_stride,
                         batch_size=1,
-                        n_cls=3
+                        n_cls=n_cls
                     )
+
 
                 # Get Cancer Heat maps
                 other_cancer_pred_map = other_seg_pred[1].cpu().numpy()
                 t2_cancer_pred_map = t2_seg_pred[1].cpu().numpy()
 
+                # Create ants images from the heat maps
                 other_cancer_pred_map = ants.core.from_numpy(other_cancer_pred_map)
                 t2_cancer_pred_map = ants.core.from_numpy(t2_cancer_pred_map)
 
+                # Register the other mri heat map to the t2 heat map
                 reg = ants.registration(t2_cancer_pred_map, other_cancer_pred_map, 'Rigid', aff_iterations=[2000, 1000, 500, 250])
 
+                # Get the warped other mri heat map
                 warped_other_mri = reg['warpedmovout']
 
                 # Compute the similarity metric between the fixed and transformed moving image
                 similarity_metric = ants.utils.image_similarity(t2_cancer_pred_map, warped_other_mri, metric_type='Correlation')
 
+                # Keep track of similarity metrics (Multiply by -1 because native output is negative)
                 similarity_metrics.append(similarity_metric*-1)
 
+                # Create an ants image from the other mri
                 ants_other_mri = ants.core.from_numpy(other_mri.cpu().squeeze(0).squeeze(0).numpy())
 
-
+                # Apply the transformation to the other mri
                 registered_mri = ants.apply_transforms(fixed=t2_cancer_pred_map,
                                                         moving=ants_other_mri,
                                                         transformlist=reg['fwdtransforms'])
 
                 write_path = f'/data/ur/bukowy/LaViolette_Data/Prostates/{filename[0]}/{mri_sequence_name}_rereg_{iteration_count}.nii'
 
+                # Save the newly registered other mri
                 ants.image_write(registered_mri, write_path, ri=False)
 
 
             similarity_metrics = np.array(similarity_metrics)
 
+            # Get mean, max, and min registration accuracies
             mean = similarity_metrics.mean()
             max = similarity_metrics.max()
             min = similarity_metrics.min()
@@ -501,14 +517,15 @@ def main(
 
             print(wandb_stats)
         
-            wandb.log(wandb_stats, step=iteration_count)
+            # Log the registration stats (Will be logged at step 249 + iteration_count)
+            # This was done as wand.log must be called to a step > the previous call
+            wandb.log(wandb_stats, step=epochs+iteration_count)
 
             iteration_count += 1
 
 
 
                                 
-
 
     distributed.barrier()
     distributed.destroy_process()

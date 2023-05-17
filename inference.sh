@@ -2,8 +2,7 @@
 
 # ###############################################################################
 #
-# Bash script to run training on ROSIE with horovod
-# To run on Rosie, run `sbatch ./train.sh` from the project home directory
+# Runs inference using the specified model and outputs to the -o flag
 #
 # ###############################################################################
 
@@ -30,8 +29,8 @@
 # Create logging directory
 now=$(date +"%m-%d-%y|%H:%M:%S")
 logdir="./segm/outputs/${now}" 
+
 # Path to container
-#container="/data/containers/msoe-tensorflow-20.07-tf2-py3.sif"
 container="/data/containers/msoe-pytorch-20.07-py3.sif"
 
 # Command to run inside container
@@ -40,5 +39,3 @@ command="python -m segm.inference --model-path seg_tiny_mask_retrain/checkpoint.
 
 # Execute singularity container on node.
 singularity exec --nv -B /data:/data ${container} ${command}
-
-# mv ./homologous_point_prediction/outputs/running/slurm-${SLURM_JOBID}.out "${logdir}/raw_slurm_out.out "

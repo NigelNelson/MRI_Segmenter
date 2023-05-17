@@ -153,6 +153,7 @@ class ElasticTransform(object):
         pts1 = np.float32([center_square + square_size, [center_square[0]+square_size, center_square[1]-square_size], center_square - square_size])
         pts2 = pts1 + random_state.uniform(-alpha_affine, alpha_affine, size=pts1.shape).astype(np.float32)
         M = cv2.getAffineTransform(pts1, pts2)
+        # CV2 library computes these warps much faster
         image = cv2.warpAffine(image, M, shape_size[::-1], borderMode=cv2.BORDER_REFLECT)
         seg = cv2.warpAffine(seg, M, shape_size[::-1], flags=cv2.INTER_NEAREST, borderMode=cv2.BORDER_REFLECT)
         # dx = gaussian_filter((random_state.rand(*shape) * 2 - 1), sigma) * alpha

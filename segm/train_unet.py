@@ -118,22 +118,9 @@ def main(
 
     log_dir = Path(log_dir)
     log_dir.mkdir(parents=True, exist_ok=True)
-    checkpoint_path = log_dir / "checkpoint.pth"
+    checkpoint_path = log_dir / "checkpoint.pth"    
 
-    # train_augs = transforms.Compose([RandomCrop(400), RandomFlip(), ElasticTransform(alpha=2), ToGray()])
-    # val_augs = ToGray()
-
-    # training_data_config = "/home/nelsonni/laviolette/method_analysis/configs/seg_train_config.json"
-    # validation_data_config = "/home/nelsonni/laviolette/method_analysis/configs/seg_val_config.json"
-
-    # train_loader = SegDataLoader(training_data_config, transform=train_augs)
-    # val_loader = SegDataLoader(validation_data_config, transform=val_augs)
-
-    # train_loader = DataLoader(train_loader, batch_size=batch_size,
-    #                     shuffle=False, sampler=DistributedSampler(train_loader))
-    # val_loader = DataLoader(val_loader, batch_size=1,
-    #                     shuffle=False, sampler=DistributedSampler(val_loader))
-
+    # Define augmentations for the Dataloaders
     train_augs = transforms.Compose([RandomCrop(400), RandomFlip(), ElasticTransform(alpha=2)])
     val_augs = None
 
@@ -149,13 +136,13 @@ def main(
                         shuffle=False, sampler=DistributedSampler(val_loader))
 
 
-    n_cls = 3 #TODO fix sloppy code
+    n_cls = 3 #TODO fix hard coded values
 
 
     # model = torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet',
     #     in_channels=3, out_channels=8, init_features=32, pretrained=False)
 
-    model =  UNet(n_channels=1, n_classes=3, bilinear=True)
+    model =  UNet(n_channels=1, n_classes=n_cls, bilinear=True)
     model = model.to(ptu.device)
 
     # optimizer
@@ -261,6 +248,7 @@ def main(
                     loss = criterion(seg_pred, seg_gt)
                 loss.backward()
         #         print(torch.allclose(before, after))
+        # comments were used to debug why the model wasn't training
                 
                 optimizer.step()
                 
@@ -276,15 +264,7 @@ def main(
                     loss=loss.item(),
                     learning_rate=optimizer.param_groups[0]["lr"],
                 )
-            # save checkpoint
-            # save checkpoint
-            # if ptu.dist_rank == 0:
 
-            #     state_dict = model.state_dict()
-            #     torch.save(state_dict, checkpoint_path)
-
-            # evaluate
-                # Evaluate
             model.eval()
             val_seg_pred = {}
             eval_logger = MetricLogger(delimiter="  ")
@@ -307,23 +287,22 @@ def main(
                         512,
                         batch_size=1,
                     )
-        #             seg_pred = model.forward(im)
                     seg_pred = seg_pred.argmax(0)
                 print(f'pred values: {torch.unique(seg_pred)}')
                 seg_pred = seg_pred.cpu().numpy()
                 val_seg_pred[filename[0]] = seg_pred
 
                 if epoch % 50 == 0 or epoch == num_epochs-1 or epoch == 0:
-                    if im.shape[1] < 3:
-                        new_im = wandb.Image(im.cpu()[0][0].numpy()*255, masks={
-                                        "prediction" : {"mask_data" : seg_pred},
-                                        "ground truth" : {"mask_data" :  val_seg_gt[filename[0]].numpy()}},
-                                        caption=filename[0])
-                    else:
-                        new_im = wandb.Image(im.cpu().squeeze(0).permute(1, 2, 0).numpy(), masks={
-                                            "prediction" : {"mask_data" : seg_pred},
-                                            "ground truth" : {"mask_data" :  val_seg_gt[filename[0]].numpy()}},
-                                            caption=filename[0])
+                    # if im.shape[1] > 3:
+                    new_im = wandb.Image(im.cpu()[0][0].numpy()*255, masks={
+                                    "prediction" : {"mask_data" : seg_pred},
+                                    "ground truth" : {"mask_data" :  val_seg_gt[filename[0]].numpy()}},
+                                    caption=filename[0])
+                    # else:
+                    #     new_im = wandb.Image(im.cpu().squeeze(0).permute(1, 2, 0).numpy(), masks={
+                    #                         "prediction" : {"mask_data" : seg_pred},
+                    #                         "ground truth" : {"mask_data" :  val_seg_gt[filename[0]].numpy()}},
+                    #                         caption=filename[0])
                     wandb_images[filename[0]] = new_im
                 
     
@@ -331,7 +310,7 @@ def main(
             scores = compute_metrics(
                 val_seg_pred,
                 val_seg_gt,
-                3, #TODO remove brutal hard coded values
+                n_cls, #TODO remove brutal hard coded values
                 #ignore_index=IGNORE_LABEL,
                 distributed=ptu.distributed,
             )

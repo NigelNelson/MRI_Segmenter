@@ -179,9 +179,7 @@ def main(
     # dataset
     dataset_kwargs = variant["dataset_kwargs"]
 
-    # train_augs = transforms.Compose([RandomCrop(400), RandomFlip(), ElasticTransform(alpha=2), ToColor()])
-    # val_augs = ToColor()
-
+    # Define transforms for the data loader
     train_augs = transforms.Compose([RandomCrop(400), RandomFlip(), ElasticTransform(alpha=2)])
     val_augs = None
 
@@ -196,13 +194,13 @@ def main(
     val_loader = DataLoader(val_loader, batch_size=1,
                         shuffle=False, sampler=DistributedSampler(val_loader))
 
-    #train_loader = create_dataset(dataset_kwargs)
+
     val_kwargs = dataset_kwargs.copy()
     val_kwargs["split"] = "val"
     val_kwargs["batch_size"] = 1
     val_kwargs["crop"] = False
-    #val_loader = create_dataset(val_kwargs)
-    # n_cls = train_loader.unwrapped.n_cls
+
+
     n_cls = 3 #TODO fix hard-code number classes
 
     # model
@@ -241,6 +239,7 @@ def main(
     else:
         sync_model(log_dir, model)
 
+    # Allows multi-GPU training
     if ptu.distributed:
         model = DDP(model, device_ids=[ptu.device], find_unused_parameters=True)
 
@@ -253,11 +252,11 @@ def main(
     with open(log_dir / "variant.yml", "w") as f:
         f.write(variant_str)
 
-    # train
-    # start_epoch = variant["algorithm_kwargs"]["start_epoch"]
+
     start_epoch = 0 # TODO remove slop
     num_epochs = epochs # TODO remove slop
-    # num_epochs = variant["algorithm_kwargs"]["num_epochs"]
+
+
     eval_freq = variant["algorithm_kwargs"]["eval_freq"]
 
     model_without_ddp = model
@@ -266,6 +265,7 @@ def main(
 
     #val_seg_gt = val_loader.dataset.get_gt_seg_maps()
 
+    # Creates a val dictionary to compare with the models outputs
     val_seg_gt = {}
     for batch in val_loader:
         val_seg_gt[batch['patient'][0]] = batch['seg'][0]
@@ -276,6 +276,8 @@ def main(
     print(f"Decoder parameters: {num_params(model_without_ddp.decoder)}")
     print('learning RATE:', lr)
     
+
+    # Used to keep track of different experiment configs
     wandb_config = dict(
         epochs=num_epochs,
         batch_size=batch_size,
@@ -285,6 +287,9 @@ def main(
         classes=n_cls
         )
 
+
+    # Below logic is used to assign custom weights to update the model
+    # inversly to the proportion of the dataset made up of a given class
     pixel_values = torch.tensor([])
     for batch in train_loader:
         if len(batch['seg']) > 1:
@@ -299,7 +304,8 @@ def main(
     for count in counts[1]:
         class_weights.append(sum(counts[1]) / (n_cls * count))
     class_weights = torch.tensor(class_weights)
-        
+    
+    # Starts a new wandb experiment
     with wandb.init(project='Registration_Experiment', config=wandb_config):
         
         wandb.watch(model, log='all', log_freq=10)

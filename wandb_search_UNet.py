@@ -1,3 +1,8 @@
+"""
+File that is responsible for defining the metrics that Weights & Biases will use
+to conduct its sweep. This file is for the UNet sweep
+"""
+
 import sys
 import os
 

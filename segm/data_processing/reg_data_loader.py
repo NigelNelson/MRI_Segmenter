@@ -53,6 +53,9 @@ def extract_normal(slide_dir, other_mri_name):
 
     seg = load_histology(os.path.join(slide_dir, seg_file_name))
     # seg = np.clip(seg.astype(int) - 1, 0, None)
+    
+    # Logic below is used to convert 9 class into just 3 class, containing
+    # background, prostate, and cancer classes
     seg[seg == 7] = 10
     seg[seg == 6] = 10
     seg[seg == 5] = 10
@@ -62,7 +65,7 @@ def extract_normal(slide_dir, other_mri_name):
     seg[seg == 2] = 8
     seg[seg == 1] = 8
 
-    seg[seg == 10] = 1 #TODO undo me
+    seg[seg == 10] = 2
     seg[seg == 8] = 1
 
     if len(np.unique(seg, return_counts=True)[1]) != 2:
@@ -76,6 +79,7 @@ def extract_normal(slide_dir, other_mri_name):
 
     for mri_name in mri_names:
         mri = load_mri(os.path.join(slide_dir, (mri_name)))
+        # Zscore normalization
         mri = (mri - mri.mean()) / mri.std()
         mri = torch.from_numpy(mri)
         t2_mris.append(mri)
@@ -87,13 +91,13 @@ def extract_normal(slide_dir, other_mri_name):
 
     for mri_name in mri_names:
         mri = load_mri(os.path.join(slide_dir, (mri_name)))
+        # Zscore normalization
         mri = (mri - mri.mean()) / mri.std()
         mri = torch.from_numpy(mri)
         other_mris.append(mri)
 
 
     t2_mri = torch.stack(t2_mris, dim=0)
-
     other_mri = torch.stack(other_mris, dim=0)
 
     return (t2_mri, other_mri, slide_dir.split('Prostates/')[1])
@@ -106,7 +110,7 @@ def extract_slide(slide_dir, other_mri_name):
 
 class RegDataLoader(Dataset):
 
-    """Lazy loading for memory use min. Loading all images first will improve performance"""
+    """Used to load multiple MRI images for use in the Registration Pipeline"""
 
     def __init__(self, config_path, transform=None, other_mri_name=''):
         self._parse_config(config_path)

@@ -38,43 +38,43 @@ from segm.unet.unet_model import UNet
 @click.option("--input-dir", "-i", type=str, help="folder with input images")
 @click.option("--output-dir", "-o", type=str, help="folder with output images")
 @click.option("--gpu/--cpu", default=True, is_flag=True)
-def main(model_path, input_dir, output_dir, gpu):
+@click.option("--n_cls", type=str)
+def main(model_path, input_dir, output_dir, gpu, n_cls):
     ptu.set_gpu_mode(gpu)
 
     # model_dir = Path(model_path).parent
     model_dir = Path(model_path)
-    # model = UNet(n_channels=1, n_classes=8, bilinear=True)
-    # data = torch.load(model_dir, map_location=ptu.device)
-    # model.load_state_dict(data)
-    model, variant = load_model(model_dir)
+    model = UNet(n_channels=1, n_classes=n_cls, bilinear=True)
+    data = torch.load(model_dir, map_location=ptu.device)
+    model.load_state_dict(data)
     model.to(ptu.device)
 
-    # normalization_name = variant["dataset_kwargs"]["normalization"]
-    # normalization = STATS[normalization_name]
-    # cat_names, cat_colors = dataset_cat_description(ADE20K_CATS_PATH)
-    cat_names = ['background',
-                '1',
-                '2',
-                '3',
-                '4',
-                '5',
-                '6',
-                '7'
-                ]
-    cat_colors = {
-        0: torch.tensor([0.0, 0.0, 0.0]).float(), 
-        1: torch.tensor([255.0, 51.0, 51.0]).float() / 255.0, # red
-        2: torch.tensor([255.0, 128.0, 0.0]).float() / 255.0, # orange
-        3: torch.tensor([255.0, 255.0, 0.0]).float() / 255.0, # yellow
-        4: torch.tensor([0.0, 255.0, 0.0]).float() / 255.0, # green
-        5: torch.tensor([0.0, 255.0, 255.0]).float() / 255.0, # cyan
-        6: torch.tensor([0.0, 0.0, 255.0]).float() / 255.0, # blue
-        7: torch.tensor([255.0, 0.0, 255.0]).float() / 255.0, # pink
-    }
+    #########################################################################
+    # Below can be used if you want a ~fancier output PIL Image
 
-    input_dir = Path(input_dir)
-    output_dir = Path(output_dir)
-    output_dir.mkdir(exist_ok=True)
+    # cat_names = ['background',
+    #             '1',
+    #             '2',
+    #             '3',
+    #             '4',
+    #             '5',
+    #             '6',
+    #             '7'
+    #             ]
+    # cat_colors = {
+    #     0: torch.tensor([0.0, 0.0, 0.0]).float(), 
+    #     1: torch.tensor([255.0, 51.0, 51.0]).float() / 255.0, # red
+    #     2: torch.tensor([255.0, 128.0, 0.0]).float() / 255.0, # orange
+    #     3: torch.tensor([255.0, 255.0, 0.0]).float() / 255.0, # yellow
+    #     4: torch.tensor([0.0, 255.0, 0.0]).float() / 255.0, # green
+    #     5: torch.tensor([0.0, 255.0, 255.0]).float() / 255.0, # cyan
+    #     6: torch.tensor([0.0, 0.0, 255.0]).float() / 255.0, # blue
+    #     7: torch.tensor([255.0, 0.0, 255.0]).float() / 255.0, # pink
+    # }
+
+    # input_dir = Path(input_dir)
+    # output_dir = Path(output_dir)
+    # output_dir.mkdir(exist_ok=True)
 
     # list_dir = list(input_dir.iterdir())
     # for filename in tqdm(list_dir, ncols=80):
@@ -105,13 +105,11 @@ def main(model_path, input_dir, output_dir, gpu):
 
     #     pil_im.save(save_name)
 
+    #########################################################################
+
 
     data_loader = DataLoader(config_path="/home/nelsonni/laviolette/method_analysis/configs/seg_test_config.json")
     for data_dict in data_loader:
-        # if True:
-        #     print(data_dict["patient"], data_dict["slide"])
-        #     print(len(data_dict["hist_points"]))
-        #     print(len(data_dict["mri_points"]))
 
         unmasked_mri = data_dict["unmasked_mri"]
 
@@ -122,8 +120,7 @@ def main(model_path, input_dir, output_dir, gpu):
         im = torch.from_numpy(unmasked_mri)
         im = F.normalize(im, 0.5, 0.5)
         im = im.permute(2, 0, 1)
-        
-        # norm_image = cv2.normalize(unmasked_mri, None, alpha = 0, beta = 255, norm_type = cv2.NORM_MINMAX, dtype = cv2.CV_32F)
+    
 
         im = im.to(ptu.device)
 

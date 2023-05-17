@@ -60,24 +60,9 @@ def extract_normal(slide_dir):
         mri = load_mri(os.path.join(slide_dir, (mri_name)))
         # mri = cv2.cvtColor(mri, cv2.COLOR_GRAY2RGB)
         mri = (mri - mri.mean()) / mri.std()
-        # mask
-        # mri[mri_mask == 0] = 0
         mri = torch.from_numpy(mri)
-        # mri = mri.unsqueeze(0) # comment out
-        # mri = F.normalize(mri, 0.5, 0.5)
-        # mri = mri.squeeze(0)
-        # mri += 1
-        # mri /= 2
         mris.append(mri)
 
-    # mri = load_mri(os.path.join(slide_dir, (t2_name)))
-    # mri_mask = load_mri(os.path.join(slide_dir, (mask_name)))
-    # # mri = cv2.cvtColor(mri, cv2.COLOR_GRAY2RGB)
-    # mri = (mri - mri.mean()) / mri.std()
-
-    # mri[mri_mask == 0] = 0
-    
-    # mri = torch.from_numpy(mri)
 
     seg = load_histology(os.path.join(slide_dir, seg_file_name))
     # seg = np.clip(seg.astype(int) - 1, 0, None)
@@ -94,14 +79,6 @@ def extract_normal(slide_dir):
     seg[seg == 8] = 1
 
     seg = torch.from_numpy(seg)
-
-    # mri = load_mri(os.path.join(slide_dir, (mri_file_name)))
-    # # mri = cv2.cvtColor(mri, cv2.COLOR_GRAY2RGB)
-    # mri = torch.from_numpy(mri)
-    # mri = mri.unsqueeze(0) # comment out
-    # mri = F.normalize(mri, 0.5, 0.5)
-    # mri = mri.squeeze(0)
-    # # mri = mri.permute(2, 0, 1)
 
     mri = torch.stack(mris, dim=0)
 

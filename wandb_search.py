@@ -1,8 +1,12 @@
+"""
+File that is responsible for defining the metrics that Weights & Biases will use
+to conduct its sweep. This file is for the ViT sweep
+"""
+
 import sys
 import os
 
 import wandb
-
 
 def main():
  

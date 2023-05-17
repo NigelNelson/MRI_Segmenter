@@ -2,8 +2,7 @@
 
 # ###############################################################################
 #
-# Bash script to run training on ROSIE with horovod
-# To run on Rosie, run `sbatch ./train.sh` from the project home directory
+# Inits a weights & biases sweep for the ViT
 #
 # ###############################################################################
 

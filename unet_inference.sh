@@ -2,8 +2,7 @@
 
 # ###############################################################################
 #
-# Bash script to run training on ROSIE with horovod
-# To run on Rosie, run `sbatch ./train.sh` from the project home directory
+# Runs inference using the UNet
 #
 # ###############################################################################
 
@@ -35,10 +34,12 @@ logdir="./segm/outputs/${now}"
 container="/data/containers/msoe-pytorch-20.07-py3.sif"
 
 # Command to run inside container
-command="python -m segm.unet_inference --model-path seg_tiny_mask_retrain/checkpoint.pth -i /home/nelsonni/laviolette/segmenter/ade20k/ade20k/release_test/testing/ -o segm/inference_segs/vit_elastic/"
+command="python -m segm.unet_inference
+ --model-path seg_tiny_mask_retrain/checkpoint.pth
+  -i /home/nelsonni/laviolette/segmenter/ade20k/ade20k/release_test/testing/
+   -o segm/inference_segs/vit_elastic/
+   --n_cls 8"
 
 
 # Execute singularity container on node.
 singularity exec --nv -B /data:/data ${container} ${command}
-
-# mv ./homologous_point_prediction/outputs/running/slurm-${SLURM_JOBID}.out "${logdir}/raw_slurm_out.out "
