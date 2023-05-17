@@ -346,7 +346,8 @@ def main(
                     window_size,
                     window_stride,
                     amp_autocast,
-                    epoch
+                    epoch,
+                    n_cls
                 )
                 print(f"Stats [{epoch}]:", eval_logger, flush=True)
                 print("")

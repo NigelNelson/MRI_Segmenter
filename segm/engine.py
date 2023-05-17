@@ -127,7 +127,8 @@ def evaluate(
     window_size,
     window_stride,
     amp_autocast,
-    epoch
+    epoch,
+    n_cls
 ):
     model_without_ddp = model
     if hasattr(model, "module"):
@@ -192,7 +193,7 @@ def evaluate(
     scores = compute_metrics(
         val_seg_pred,
         val_seg_gt,
-        2, #TODO remove brutal hard coded values
+        n_cls, #TODO remove brutal hard coded values
         #ignore_index=IGNORE_LABEL,
         distributed=ptu.distributed,
     )
