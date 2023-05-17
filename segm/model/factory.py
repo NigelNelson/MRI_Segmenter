@@ -60,7 +60,7 @@ def create_vit(model_cfg):
         )
 
     default_cfg["input_size"] = (
-        6, #TODO Remove need to hardcode input channels
+        1, #TODO Remove need to hardcode input channels
         model_cfg["image_size"][0],
         model_cfg["image_size"][1],
     )

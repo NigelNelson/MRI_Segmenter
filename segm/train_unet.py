@@ -149,13 +149,13 @@ def main(
                         shuffle=False, sampler=DistributedSampler(val_loader))
 
 
-    n_cls = 9 #TODO fix sloppy code
+    n_cls = 3 #TODO fix sloppy code
 
 
     # model = torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet',
     #     in_channels=3, out_channels=8, init_features=32, pretrained=False)
 
-    model =  UNet(n_channels=6, n_classes=9, bilinear=True)
+    model =  UNet(n_channels=1, n_classes=3, bilinear=True)
     model = model.to(ptu.device)
 
     # optimizer
@@ -240,7 +240,7 @@ def main(
 
     best_iou = 0
         
-    with wandb.init(project='MRI_zscore_sequence_experiments', config=wandb_config):
+    with wandb.init(project='Registration_Experiment', config=wandb_config):
         
         wandb.watch(model, log='all', log_freq=10)
 
@@ -314,7 +314,7 @@ def main(
                 val_seg_pred[filename[0]] = seg_pred
 
                 if epoch % 50 == 0 or epoch == num_epochs-1 or epoch == 0:
-                    if im.shape[1] > 3:
+                    if im.shape[1] < 3:
                         new_im = wandb.Image(im.cpu()[0][0].numpy()*255, masks={
                                         "prediction" : {"mask_data" : seg_pred},
                                         "ground truth" : {"mask_data" :  val_seg_gt[filename[0]].numpy()}},
@@ -331,7 +331,7 @@ def main(
             scores = compute_metrics(
                 val_seg_pred,
                 val_seg_gt,
-                9, #TODO remove brutal hard coded values
+                3, #TODO remove brutal hard coded values
                 #ignore_index=IGNORE_LABEL,
                 distributed=ptu.distributed,
             )

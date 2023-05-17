@@ -44,19 +44,24 @@ def extract_normal(slide_dir):
     seg_file_name = 'mri_seg_mask.tiff'
     t2_name = 'mri_slice_double_T2.nii'
     # mri_file_name = 'mri_slice_double_DWI_clin_reg.nii'
-    adc_name = 'mri_slice_double_ADC_machine_reg.nii'
-    mri_1 = 'mri_slice_double_DWI_b10_reg.nii'
-    mri_2 = 'mri_slice_double_DWI_b100_reg.nii'
-    mri_3 = 'mri_slice_double_DWI_b1000_reg.nii'
-    mri_4 = 'mri_slice_double_DWI_b1400_reg.nii'
-    mri_names = [adc_name, t2_name, mri_1, mri_2, mri_3, mri_4]
+    # adc_name = 'mri_slice_double_ADC_machine_reg.nii'
+    mri_1 = 'mri_slice_double_b10_realigned.nii'
+    mri_2 = 'mri_slice_double_b100_realigned.nii'
+    mri_3 = 'mri_slice_double_b1000_realigned.nii'
+    mri_4 = 'mri_slice_double_b1400_realigned.nii'
+    mask_name  = 'mri_slice_double_prostate_mask.nii'
+    mri_names = [t2_name]
 
     mris = []
+
+    mri_mask = load_mri(os.path.join(slide_dir, (mask_name)))
 
     for mri_name in mri_names:
         mri = load_mri(os.path.join(slide_dir, (mri_name)))
         # mri = cv2.cvtColor(mri, cv2.COLOR_GRAY2RGB)
         mri = (mri - mri.mean()) / mri.std()
+        # mask
+        # mri[mri_mask == 0] = 0
         mri = torch.from_numpy(mri)
         # mri = mri.unsqueeze(0) # comment out
         # mri = F.normalize(mri, 0.5, 0.5)
@@ -64,13 +69,30 @@ def extract_normal(slide_dir):
         # mri += 1
         # mri /= 2
         mris.append(mri)
+
     # mri = load_mri(os.path.join(slide_dir, (t2_name)))
+    # mri_mask = load_mri(os.path.join(slide_dir, (mask_name)))
     # # mri = cv2.cvtColor(mri, cv2.COLOR_GRAY2RGB)
     # mri = (mri - mri.mean()) / mri.std()
+
+    # mri[mri_mask == 0] = 0
+    
     # mri = torch.from_numpy(mri)
 
     seg = load_histology(os.path.join(slide_dir, seg_file_name))
     # seg = np.clip(seg.astype(int) - 1, 0, None)
+    seg[seg == 7] = 10
+    seg[seg == 6] = 10
+    seg[seg == 5] = 10
+    seg[seg == 4] = 10
+
+    seg[seg == 3] = 8
+    seg[seg == 2] = 8
+    seg[seg == 1] = 8
+
+    seg[seg == 10] = 2
+    seg[seg == 8] = 1
+
     seg = torch.from_numpy(seg)
 
     # mri = load_mri(os.path.join(slide_dir, (mri_file_name)))
@@ -143,8 +165,7 @@ class SegDataLoader(Dataset):
             try:
                 extract_slide(sample_dir)
             except Exception as e:
-                print(f'Skipping {sample_dir}')
-                print(e)
+                pass
                 tmp_dirs.remove(sample_dir)
         return tmp_dirs
 
@@ -156,8 +177,7 @@ class SegDataLoader(Dataset):
             data_dict['seg'] = seg
             data_dict['patient'] = patient
         except Exception as e:
-            print(f'skipping {dir}')
-            print(e)
+            pass
         return data_dict
 
     def on_epoch_end(self):

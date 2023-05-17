@@ -71,13 +71,12 @@ def main(model_path, input_dir, output_dir, gpu):
     ptu.set_gpu_mode(gpu)
 
     # model_dir = Path(model_path).parent
-    model_dir = Path(model_path)
     # model = UNet(n_channels=1, n_classes=8, bilinear=True)
     # data = torch.load(model_dir, map_location=ptu.device)
     # model.load_state_dict(data)
-    print(model_dir)
-    model, variant = load_model(model_dir)
 
+    model_dir = Path(model_path)
+    model, variant = load_model(model_dir)
     model.to(ptu.device)
 
     amp_autocast = torch.cuda.amp.autocast
@@ -139,7 +138,7 @@ def main(model_path, input_dir, output_dir, gpu):
     #     pil_im.save(save_name)
 
 
-    test_augs = ToColor()
+    test_augs = ToGray()
 
     test_data_config = "/home/nelsonni/laviolette/method_analysis/configs/seg_test_config.json"
 
@@ -150,7 +149,10 @@ def main(model_path, input_dir, output_dir, gpu):
 
     test_seg_gt = {}
     for batch in test_loader:
-        test_seg_gt[batch['patient'][0]] = batch['seg'][0]
+        tmp_batch = batch['seg'][0]
+        tmp_batch[tmp_batch > 0] = 1 #TODO remove me
+        test_seg_gt[batch['patient'][0]] = tmp_batch #TODO remove me
+        # test_seg_gt[batch['patient'][0]] = batch['seg'][0]
 
     test_seg_pred = {}
     for batch in test_loader:
@@ -172,9 +174,31 @@ def main(model_path, input_dir, output_dir, gpu):
 #             seg_pred = model.forward(im)
             seg_pred = seg_pred.argmax(0)
         seg_pred = seg_pred.cpu().numpy()
+
+        seg_pred[seg_pred > 0] = 1 # TODO remove me
+
         test_seg_pred[filename[0]] = seg_pred
 
         print(f'{iou_pytorch(torch.from_numpy(seg_pred), test_seg_gt[filename[0]])},')
+
+        # f, ax = plt.subplots(1, 2, figsize=(20,10))
+        # ax[0].imshow(batch['mri'][0][0], cmap='gray')
+        # ax[0].imshow(seg_pred, alpha=.4)
+        # ax[1].imshow(batch['mri'][0][0], cmap='gray')
+        # ax[1].imshow(test_seg_gt[filename[0]], alpha=.4)
+
+        # f.tight_layout()
+
+        file_name = filename[0].replace('/', '_') + '.jpg'
+
+        # f.savefig(model_dir.parent / file_name)
+
+        plt.figure(figsize=(10,10))
+        plt.imshow(seg_pred)
+        plt.imshow(test_seg_gt[filename[0]], alpha=.4)
+
+        plt.savefig(model_dir.parent / file_name)
+
 
 
         # plt.imshow(im[0].cpu(), cmap='gray')
@@ -196,7 +220,7 @@ def main(model_path, input_dir, output_dir, gpu):
     scores = compute_metrics(
         test_seg_pred,
         test_seg_gt,
-        8,
+        2,
         ret_cat_iou=True,
     )
 

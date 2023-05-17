@@ -203,7 +203,7 @@ def main(
     val_kwargs["crop"] = False
     #val_loader = create_dataset(val_kwargs)
     # n_cls = train_loader.unwrapped.n_cls
-    n_cls = 9 #TODO fix sloppy code
+    n_cls = 3 #TODO fix hard-code number classes
 
     # model
     net_kwargs = variant["net_kwargs"]
@@ -300,7 +300,7 @@ def main(
         class_weights.append(sum(counts[1]) / (n_cls * count))
     class_weights = torch.tensor(class_weights)
         
-    with wandb.init(project='MRI_zscore_sequence_experiments', config=wandb_config):
+    with wandb.init(project='Registration_Experiment', config=wandb_config):
         
         wandb.watch(model, log='all', log_freq=10)
 

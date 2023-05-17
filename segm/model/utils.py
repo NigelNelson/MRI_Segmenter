@@ -131,7 +131,7 @@ import segm.utils.torch as ptu
 #     flip = windows["flip"]
 
 #     logit = torch.zeros((C, H, W), device=im_windows.device)
-#     count = torch.zeros((1, H, W), device=im_windows.device)
+#     count = torch.zeros((1, H, W), device=im_windows.device)ls
 #     for window, (ha, wa) in zip(im_windows, anchors):
 #         logit[:, ha : ha + ws, wa : wa + ws] += window
 #         count[:, ha : ha + ws, wa : wa + ws] += 1
@@ -265,7 +265,6 @@ def unpadding(y, target_size):
 
 def resize(im, smaller_size):
     im = im.unsqueeze(0)
-    print(im.shape[2:])
     h, w = im.shape[2:]
     if h < w:
         ratio = w / h
@@ -333,8 +332,9 @@ def inference(
     window_size,
     window_stride,
     batch_size,
+    n_cls
 ):
-    C = 9 # TODO remove hardcode
+    C = n_cls # TODO remove hardcode
     seg_map = torch.zeros((C, ori_shape[0], ori_shape[1]), device=ptu.device)
     for im, im_metas in zip(ims, ims_metas):
         #im = im.unsqueeze(0)

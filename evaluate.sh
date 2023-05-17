@@ -36,7 +36,7 @@ logdir="./segm/outputs/${now}"
 container="/data/containers/msoe-pytorch-20.07-py3.sif"
 
 # Command to run inside container
-command="python -m segm.evaluate --model-path seg_tiny_mask_balanced/checkpoint.pth -i /home/nelsonni/laviolette/segmenter/ade20k/ade20k/release_test/testing/ -o segm/inference_segs/unet_Rosie_Paper/"
+command="python -m segm.evaluate --model-path T2_ViT_Tiny_New/checkpoint.pth -i /home/nelsonni/laviolette/segmenter/ade20k/ade20k/release_test/testing/ -o T2_ViT_Tiny_New/"
 
 # Define dataset location
 location="~/laviolette/segmenter/ade20k"

@@ -157,18 +157,17 @@ def evaluate(
                 window_size,
                 window_stride,
                 batch_size=1,
+                n_cls=2
             )
             seg_pred = seg_pred.argmax(0)
 
-
-        print(f'pred values: {torch.unique(seg_pred)}')
 
 
         seg_pred = seg_pred.cpu().numpy()
         val_seg_pred[filename[0]] = seg_pred
 
         if epoch % 50 == 0 or epoch == 349 or epoch == 0:
-            if ims.shape[1] > 3:
+            if ims.shape[1] < 3:
                 new_im = wandb.Image(ims.cpu()[0][0].numpy()*255, masks={
                                 "prediction" : {"mask_data" : seg_pred},
                                 "ground truth" : {"mask_data" :  val_seg_gt[filename[0]].numpy()}},
@@ -193,7 +192,7 @@ def evaluate(
     scores = compute_metrics(
         val_seg_pred,
         val_seg_gt,
-        9, #TODO remove brutal hard coded values
+        2, #TODO remove brutal hard coded values
         #ignore_index=IGNORE_LABEL,
         distributed=ptu.distributed,
     )

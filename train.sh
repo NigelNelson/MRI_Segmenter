@@ -37,7 +37,7 @@ now=$(date +"%m-%d-%y|%H:%M:%S")
 container="/data/containers/msoe-pytorch-20.07-py3.sif"
 
 # Command to run inside container
-command="python -m segm.train --log-dir T2_ViT_Tiny --dataset ade20k --no-resume --backbone vit_tiny_patch16_384 --decoder mask_transformer --batch-size 8 --epochs 350 --weight-decay 0.001 -lr 0.001"
+command="python -m segm.train --log-dir T2_ViT_Base1 --dataset ade20k --no-resume --backbone vit_tiny_patch16_384 --decoder mask_transformer --batch-size 8 --epochs 350 --weight-decay 0.001 -lr 0.001"
 
 # Define dataset location
 location="~/laviolette/segmenter/ade20k"
