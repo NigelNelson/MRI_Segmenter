@@ -10,5 +10,5 @@
 
 ### Changing Number of Classes:
 1. If using UNet, change the *n_classes* param in the constructor call to UNet
-2. Change the *n_cls* variable in whichever script you running (ex: segm/train.py)
+2. Change the *n_cls* variable in whichever script you running (e.g. segm/train.py)
 3. Go to segm/dataprocessing/seg_data_loader.py's *extract_normal()* and make sure that the segmentation masks are being loaded with your desired number of classes
