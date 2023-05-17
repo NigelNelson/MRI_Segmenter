@@ -1,5 +1,5 @@
 # Help Doc for Hardcoded values
-### *Disclaimer*: This likely not extensive
+### *Disclaimer*: This is likely not extensive
 
 ### Changing Number of Channels
 - Changing the number of input channels likely relates to adding or removing MRI sequences.
